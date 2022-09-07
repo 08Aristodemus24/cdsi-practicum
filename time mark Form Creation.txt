@@ -1,11 +1,40 @@
-1:25:19
+time mark (menus): 
 
 topics:
+learn what you need to know then study those that you vaguely know because of time restriction deply
 
 
+design patterns of a form
+simple list and customer groups akin to retrieving a query set with objects that meet the constraints of having specific values of their fields using a GET http request method. Setup forms are like setting up a google account, or a bank account etc. which has fields that ask you for certain information, but what form pattern is this under?
+setup pages are under table of contents design patterns
+sub patterns - applied in a smilar manner as form patterns e.g. fields groups, image preview, fields, and custom filter, (don't forget a filter functionality is implemented through a form even in html, css, javascript). Now I understand; patterns of forms in this context is just the typical or usual ways of how users use forms to create, retrieve, update, and delete data
+
+form properties:
+view edit mode property values:
+auto
+view
+edit
+
+RootDatasource.AllowCreate (btw this simply means in OOP that the the our forms node/object can access the object RootDatasource and then has access to its property AllowCreate etc.)
+RootDatasource.AllowDelete
+
+Everything just has a visual interface we can now use
+
+form pattern tab
 
 
-DAY 3
+Learning fast:
+try to watch the videos so you can have already knowledge on what the instructors are doing 
+know what they discuss
+look up what they discuss in the documentation because it si bound to be there
+read it and get the knowledge that you can
+then watch the videos again and see how they implement it, there is no need to read what is in the videos
+code along with your own version
+screenshot your code and save it with doodles for side notes
+
+
+to complete
+DAY 3 (late)
 X++ Overview
 Classes
 
