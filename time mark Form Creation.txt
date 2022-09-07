@@ -1,3 +1,30 @@
-4:28
+1:25:19
+
+topics:
+
+
+
+
+DAY 3
+X++ Overview
+Classes
+
+DaY 4
+Database Manipulation
+Exception handling
+
+Day 5
+Code extension
+Event handling
+
+DAY 6
+Reports
+Security basics
+
+DAY 7
+Data entity
+Power BI
+
+​
 
 
