@@ -4,24 +4,12 @@ topics:
 learn what you need to know then study those that you vaguely know because of time restriction deply
 
 
-design patterns of a form
-simple list and customer groups akin to retrieving a query set with objects that meet the constraints of having specific values of their fields using a GET http request method. Setup forms are like setting up a google account, or a bank account etc. which has fields that ask you for certain information, but what form pattern is this under?
-setup pages are under table of contents design patterns
-sub patterns - applied in a smilar manner as form patterns e.g. fields groups, image preview, fields, and custom filter, (don't forget a filter functionality is implemented through a form even in html, css, javascript). Now I understand; patterns of forms in this context is just the typical or usual ways of how users use forms to create, retrieve, update, and delete data
-
-form properties:
-view edit mode property values:
-auto
-view
-edit
-
-RootDatasource.AllowCreate (btw this simply means in OOP that the the our forms node/object can access the object RootDatasource and then has access to its property AllowCreate etc.)
-RootDatasource.AllowDelete
-
-Everything just has a visual interface we can now use
-
-form pattern tab
-
+to extend a prebuilt in this case menu we can do it by right clicking a pre built menu in the AOT, and clicking create extension
+menu artifacts
+drag the created menu in the resources folder of the newly extended menu
+and under dragged menu we drag under it our created menu items
+a menu item button is like a navbar link or a navigation link maybe navbars in general are just menus 
+clicking the run button in the IDE will launch the server that will locally host our application
 
 Learning fast:
 try to watch the videos so you can have already knowledge on what the instructors are doing 
