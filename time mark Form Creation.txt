@@ -1,4 +1,5 @@
-time mark (menus): 
+
+time mark (menus): 1:46:19
 
 topics:
 learn what you need to know then study those that you vaguely know because of time restriction deply
@@ -21,18 +22,701 @@ code along with your own version
 screenshot your code and save it with doodles for side notes
 
 
-to complete
-DAY 3 (late)
-X++ Overview
-Classes
 
 DaY 4
-Database Manipulation
 Exception handling
 
+file: DBFMVehicleEntry.xpp
+DBFMVehicleTableTest vehicle_table;
+
+public void run()
+{
+	this.setupDialog();
+	Dialog.run();
+	Dialog.wait();
+	if(Dialog.closeOk())
+	{
+		this.getFieldValues();
+		if(vehicle_table.validateWrite())
+		{
+			vehicle_table.insert();
+			DBFMVehicleEntry::tableInsertSuccess();
+		}
+	}
+}
+
+public void getFieldValues()
+{
+	str make, model, VIN;
+	int vehicle_id;
+	DBFMFuelLevel fuel_level;
+
+	make = df_make.value();
+	model = df_model.value();
+	VIN = df_vin.value();
+	fuel_level = df_fuel_level.value();
+
+	try
+	{
+		if(strlen(VIN) < 18)
+		{
+			throw error("Invalid VIN. Cannot be fewer than 18 characters. Appending characters");
+		}
+		else
+		{
+		
+		}
+	}
+
+	catch{
+		// see how many 0s are needed for the VIN to be valid
+		// e.g. VIN is 7 in length missing 11 0s
+		for(int i = 0; i < 18 - strlen(VIN); ++i)
+		{
+			VIN += "0";
+		}
+		retry;
+	}
+
+	vehicle_table.DBFMMakeTest = make;
+	vehicle_table.DBFMModelTest = model;
+	vehicle_table.DBFMVINTest = VIN;
+	vehicle_table.DBFMFuelLevelTest = fuel_level;
+}
+
+
+// if VIN is less than 18 characters throw an error but retry the try block and append now the missing characters through 0s for the VIN field
+
+public void setupDialog()
+{
+
+	// to add 
+	df_fuel_level = Dialog.addField(extendedTypeStr(DBFMFuelLevelTest), "Fuel level");
+}
+
+
+
+
+
+
+DBFMVehicleTable.xpp
+
+public class DBFMVehicleTable extends common
+{
+	public void initValue()
+	{
+		super();
+	}
+
+	public void insert()
+	{
+		super();
+	}
+
+	// method runs when modifying a field, takes in a field that was modified
+	public void modifiedField(Field _fieldId)
+	{
+		super(_fieldId);
+
+		switch(_fieldId)
+		{
+			// fieldNum(<table name>, <table field>)
+			case fieldNum(DBFMVehicleTableTest, DBFMServiceTypeCodeTest):
+				info("service type field is updated");
+				break;
+			case fieldNum(DBFMVehicleTableTest, DBFMSeatingCapacityTest):
+				info("seating capacity field is updated");
+				break;
+			case fieldNum(DBFMVehicleTableTest, DBFMModel):
+				info("model field is updated");
+				break;
+		}
+	}
+
+	public boolean validateWrite()
+	{
+		boolean is_valid = super();
+		if(this.DBFMFuelLevel < 10)
+		{
+			is_valid = false;
+			error("fuel level must be greater than or equal 10");
+		}
+	
+		return is_valid;
+	}
+}
+
+
+
+
+
+
+
+
+
+file: CustCreateCustomer.xpp
+public void run()
+{
+CustTable cust_table;
+Currency curr_table;
+
+Dialog dialog = new Dialog("Create new customer");
+DailogField df_cust_acc = Dialog.addField(extendedTypeStr(CustVendAc), "Account number");
+DialogField df_group = Dialog.addField(extendedTypeStr(CustGroupId), "Group");
+DialogField df_credit_rating = Dialog.addField(extendedTypeStr(CustCreditRating), "Credit rating");
+
+const int MAX_RETRIES = 5;
+int retry_count = 0;
+
+
+if(dialog.run()){
+try
+{
+	cust_table.AccountNum = df_cust_acc.value();
+	cust_table.CustGroup = df_group.value();
+	cust_table.CreditRating = df_credit_rating.value();
+	if(!cust_table.validateWrite())
+	{
+		// this will throw an error since the currency field is not supplied a value;
+		throw error("Please enter all required fields");
+	}
+	else
+	{
+		cust_table.insert();
+	}
+}
+catch(Exception::Error)
+{
+	// check if Currency field is indeed blank
+	if(!cust_table.Currency)
+	{
+		select firstonly curr_table;
+		cust_table.Currency = curr_table.CurrencyCode;
+		if(retry_count <= MAX_RETRIES)
+		{
+			++retry_count;
+			retry;
+		}
+	}
+	else
+	{
+		error("An error occured. please try again");
+	}
+}
+}
+}
+
+
+
+DBFMBaseClass.xpp
+class DBFMBaseClass
+{
+	public int curr_state;
+	
+	public int permState(int _value=curr_state)
+	{
+		curr_state = _value;
+		return curr_state;
+	}
+
+	public void displayState()
+	{
+		info(strFmt("DBFMBaseClass state: %1", this.permState()));
+	}
+}
+
+
+
+DBFMBaseClass_Extension.xpp
+[ExtensionOf(classStr(DBFMBaseClass))]
+final class DBFMBaseClass_Extension
+{
+	public void setCustomState(int cust_state)
+	{
+		this.permState(cust_state);
+	}
+	
+	public void displayState()
+	{
+		warning("from extension class");
+		next displayState();
+		warning("from extension class");
+	}
+}
+
+
+
+DBFMChildClass.xpp
+class DBFMChildClass extends DBFMBaseClass
+{
+	public void displayState()
+	{
+		info("child class before super()");
+		super();
+		info("child class after super");
+	}
+}
+
+
+
+DBFMChildClass_Extension.xpp
+[ExtensionOf(classStr(DBFMChildClass))]
+final class DBFMChildClass_Extension
+{
+	public void displayState()
+	{
+		info("Child class extension before next");
+		next displayState();
+		info("Child class extension after next");
+	}
+}
+
+
+
+DBFMExtendedClasses.xpp
+class DBFMExtendedClasses
+{
+	public static void main(Args _args)
+	{
+		// we still call the normal name of a now extended class
+		DBFMBaseClass bc = new DBFMBaseClass();
+		bc.displayState();
+		bc.setCustomeState(10000);
+		bc.displayState();
+
+		DBFMChildClass cc = new DBFMChildClass();
+		cc.displayState();
+		cc.setCustomeState(50000);
+		cc.displayState();
+	}
+
+	
+}
+
+
+
+CustTableDBFM_Extension.xpp
+[ExtensionOf(tableStr(CustTable))]
+final class CustTableDBFM_Extension
+{
+	// does this override the this.insert() method of the CustTable table
+	void insert(DirPartyType _partyType, Name _name, boolean _updateCRM)
+	{
+		next insert(_partyType, _name, _updateCRM);
+	}
+
+}
+
+
+
+
+next keyword is akin to super() method to call the original method of the parent class
+next cannot also be written inside conditional statements scopes
+The next keyword behaves like a super, and it will define when your extended logic executes
+The next call after your code behaves like a Pre-event handler. Your logic executes first, and later on, the logic residing in the original method gets executed
+
+
+Activity 1:
+-COC enabled strongly typed extension capabilities of public and protected methods
+-it allows technical consultants to extend the application avoiding over-layering
+-to use COC you must declare your class as final and your methods should always contain the next keyword
+-only public and protected methods are allowed to be extended
+-you can add custom logic that will run before and/or after the standar dcode runs
+-lyou can access the protected and public methods, and variables of the base class
+-you can only extend objects that are part of the referenced packages of your model. This is done through clicking the model parameters under the dynamics 365 menu, and updating the model parameters, the once in the window select the DevelopmentBasicsFMS option, next check the model we are trying to reference always e.g. CustTable for instance. This works like an import statement which adds the model that we check to our current project directory which we can always access at will
+-methods with [Hookable(false)] or [Wrappable(false)] attribute cannot be extended
+-methods that use the final keyword cannot be wrapped in an extension class
+-class name must have an _Extension suffix
+-class declaration needs to ouse the final keyword
+-add the ExtensionOf attribute on the class
+-use COC to extend the following: table, class, form, etc.
+-the next keyword is required. This will determine on which part of the code the base class will be called
+
+
+COCBaseClass.xpp
+class COCBaseClass
+{
+	public void new()
+	{
+		//
+	}
+
+	protected void test()
+	{
+		info("base class call");
+	}
+
+	public void runTest()
+	{
+		this.test();
+	}
+}
+
+
+COCChildClass.xpp
+class COCChildClass extends COCBaseClass
+{
+	// override test() method of parent class
+	protected void test()
+	{
+		info("child class before super");
+		//  super() calls the original overriden method of the parent class
+		// where ever super() is scoped or the method it is currently in (usually an overriden method)
+		// super() assimilates the parent method of that of the overriden method it is inside of
+		// and returns (or not) its respective value, in this case the test() method is overriden 
+		// and is the method it is inside in, therefore call the parent test() method
+		super();
+		info("child class after super");
+	}
+}
+
+COCChildClass_Extension.xpp
+[ExtensionOf(classStr(COCChildClass))]
+final class COCCHildClass_Extension
+{
+	protected void test()
+	{
+		info("extension 1 before next call")
+		next test();
+		info("extension 1 after next call")
+	}
+}
+
+
+
+[ExtensionOf(tableStr(CustTable))]
+final class CustTableDBFM_Extension
+{
+	void insert(DirPartyType _partyType, Name _name, boolean _updateCRM)
+	{
+		if(str2Int(this.creditRating) < 200)
+		{
+			this.Blocked = CustVendorBlocked::All;
+			info("The customer has been placed on hold du to low credit rating. Please review");
+		}
+		next insert(_partyType, _name, _updateCRM);
+	}
+}
+
+
+
+
+we can also use other built or even pre-built objects like tables and forms in creating extensions of them
+e.g. [ExtensionOf(formStr(CustForm))] or [ExtensionOf(tableStr(CustTable))]
+
+
+we can override methods of the tables we created and pre-built tables by right clicking the methods node of a table and navigating to the override method and selecting the method that we will override
+this will then add our overriden method in this node and we can edit this method through x++ code 
+
+
+DBFMVehicleTable.xpp
+
+public class DBFMVehicleTable extends common
+{
+	public void initValue()
+	{
+		super();
+	}
+
+	public void insert()
+	{
+		super();
+	}
+
+	// method runs when modifying a field, takes in a field that was modified
+	public void modifiedField(Field _fieldId)
+	{
+		super(_fieldId);
+
+		switch(_fieldId)
+		{
+			// fieldNum(<table name>, <table field>)
+			case fieldNum(DBFMVehicleTableTest, DBFMServiceTypeCodeTest):
+				info("service type field is updated");
+				break;
+			case fieldNum(DBFMVehicleTableTest, DBFMSeatingCapacityTest):
+				info("seating capacity field is updated");
+				break;
+			case fieldNum(DBFMVehicleTableTest, DBFMModel):
+				info("model field is updated");
+				break;
+		}
+	}
+
+	public boolean validateWrite()
+	{
+		boolean is_valid = super();
+		if(this.DBFMFuelLevel < 10)
+		{
+			is_valid = false;
+			error("fuel level must be greater than or equal 10");
+		}
+	
+		return is_valid;
+	}
+}
+
+
 Day 5
-Code extension
+Code extension - but what to use extensions or by clicking the override option in the tables that we have, I guess overriding the functionality of a table 
+
+EXERCISE 1:
+- set initial value of Year to current date (I guess we can override here the this.initValue() method of a table, use today())
+- add validation "year must not be greater than current date"
+- add year on dialog (simple Dialog.addField(extendedTypeStr(DBFMYearTest), "year");)
+- set initial value of vehicle id to the number next to the greatest value of saved vehicle ids (will probably use the select statement and pickign the max of all vehicle ids, then using this max value for the overriden initValue())
+- disable editing of vehicle id on the table (this method already exists as a built in method)
+
+DBFMVehicleEntry.xpp
+class DBFMVehicleEntry
+{
+	DBFMVehicleTableTest vehicle_table;
+	Dialog dialog;
+	DialogField df_make, df_model, df_VIN, df_vehicle_id, df_fuel_level, df_year;
+
+	public static void main(Args _args)
+	{
+		DBFMVehicleEntry ve = new DBFMVehicleEntry();
+		ve.run();		
+	}
+
+
+	public void run()
+	{
+		this.setupDialog();
+		Dialog.run();
+		Dialog.wait();
+		if(Dialog.closeOk())
+		{
+			this.getFieldValues();
+			if(vehicle_table.validateWrite())
+			{
+				vehicle_table.insert();
+				DBFMVehicleEntry::tableInsertSuccess();
+			}
+		}
+	}
+
+	public void getFieldValues()
+	{
+		str make, model, VIN;
+		int vehicle_id;
+		DBFMFuelLevel fuel_level;
+
+		make = df_make.value();
+		model = df_model.value();
+		VIN = df_vin.value();
+		fuel_level = df_fuel_level.value();
+
+		try
+		{
+			if(strlen(VIN) < 18)
+			{
+				throw error("Invalid VIN. Cannot be fewer than 18 characters. Appending characters");
+			}
+			else
+			{
+		
+			}
+		}
+
+		catch{
+			// see how many 0s are needed for the VIN to be valid
+			// e.g. VIN is 7 in length missing 11 0s
+			for(int i = 0; i < 18 - strlen(VIN); ++i)
+			{
+				VIN += "0";
+			}
+			retry;
+		}
+
+		vehicle_table.DBFMMakeTest = make;
+		vehicle_table.DBFMModelTest = model;
+		vehicle_table.DBFMVINTest = VIN;
+		vehicle_table.DBFMFuelLevelTest = fuel_level;
+	}
+
+	public setupDialog()
+	{
+		vehicle_table.init_value();
+
+		df_make = Dialog.add(extendedTypeStr(DBFMMakeTest), "make");
+		df_model = Dialog.add(extendedTypeStr(DBFMModelTest), "model");
+		df_VIN = Dialog.add(extendedTypeStr(DBFMVINTest), "vehicle identification number (VIN)");
+		df_fuel_level = Dialog.add(extendedTypeStr(DBFMFuelLevelTest), "fuel level");
+		df_year = Dialog.add(extendedTypeStr(DBFMYearTest), "year");
+		df_vehicle_id = Dialog.add(extendedTypeStr(DBFMModelTest), "model");
+
+		df_vehicle_id.value(vehicle_table.DBFMVehicleIdTest);
+		df_vehicle_id.allowEdit(false);
+		df_year.value(vehicle_table.DBFMYear);
+	}
+}
+
+
+
+DBFMVehicleTable.xpp
+public class DBFMVehicleTable extends common
+{
+	public void initValue()
+	{
+
+		this.DBFMYearTest = today();
+		this.DBFMVehicleIdTest = this.getMaxVehicleId() + 1;
+		super();
+	}
+
+	public void insert()
+	{
+		super();
+	}
+
+	// method runs when modifying a field, takes in a field that was modified
+	public void modifiedField(Field _fieldId)
+	{
+		super(_fieldId);
+
+		switch(_fieldId)
+		{
+			// fieldNum(<table name>, <table field>)
+			case fieldNum(DBFMVehicleTableTest, DBFMServiceTypeCodeTest):
+				info("service type field is updated");
+				break;
+			case fieldNum(DBFMVehicleTableTest, DBFMSeatingCapacityTest):
+				info("seating capacity field is updated");
+				break;
+			case fieldNum(DBFMVehicleTableTest, DBFMModel):
+				info("model field is updated");
+				break;
+		}
+	}
+
+	public boolean validateWrite()
+	{
+		boolean is_valid = super();
+		if(this.DBFMFuelLevel < 10)
+		{
+			is_valid = false;
+			error("fuel level must be greater than or equal 10");
+		}
+
+		if(this.DBFMYearTest > today())
+		{
+			is_valid = false;
+			error("year must not be greater than current date")
+		}
+	
+		return is_valid;
+	}
+
+	private DBFMVehicleIdTest getMaxVehicleId()
+	{
+		return (select maxof(DBFMVehicleIdTest) from vehicle_table).DBFMVehicleIdTest;
+	}
+}
+
+
+
+-create new DBFMVehicleTableGenFormTest
+-data source: DBFMVehicleTableTest
+-pattern: simple list
+-add vehicle id, VIN, vehicle type code, year, make, model, gross vehicle weight, fuel level, inspect  date, service type code
+-create DBFMVehicleGenMenuItem
+-add to OrganizationAdministration > Resources > Menus
+-becuse validation of VIN is written in our this.getFieldValues() method we must now include it in the this.validateWrite() method
+
+
+Exercise 2:
+-using chain of command, set th einitial value of the field VengGroup in the VendTable to the first VendGroup from VendGroup table
+-therefore import or include this in our model parameters this VendTable
+-build and open accounts payable > vendors > all vendors
+-click on new under th action pane and see if the group is set to the initial value
+
+
+DBFMVendTable_Extension.xpp
+[ExtensionOf(tableStr(VendTable))]
+final class DBFMVendTable_Extension
+{
+
+	public void initValue()
+	{
+		VendGroup vendGroup;
+
+		// ah ok because fields tables have internally no values
+		// then the initValue() method is called to initialize the fields to these values
+		// if there is no setting of any field then we can place next initValue() 
+		// either at the top or at the bottom
+		this.VendGroup = (select firstonly VendGroup from vendGroup).VendGroup;
+		next initValue();
+
+		// remember we can now dictate the behavior of the Vendtable because we have already extended it,
+		// so this is the class it now uses overall and the initValue() of the base class is not anymore
+		// the initValue() method being called but rather this declaration in our extension
+	}
+
+}
+
+Delegates allow us to access elements in higher models from a lower model. Below is a model heirarchy
+Test 
+Application suite
+Application foundation
+Application platform
+
+exhibit a: application foundation needs something from suite, suite needs to subscribe to application foundation
+
+(1)delegate (2)void  applyDiscountDelegate(real _receiptTotal, EventHandlerResult _result)
+{
+(3)
+}
+
+this is for application suite:
+[SubscribesTo(classStr(Simpletax), delegateStr(SimpleTax, applyDiscountDelegate))]
+public static void applyDiscountDelegateHandler(real _receiptTotal, EventHandlerResult _result)
+{
+	real discountedTotal = _receiptTotal * (1 - DiscountRate);
+	_result.result(discountedTotal);
+}
+
+for application foundation to use application suite:
+public real calculateTotalTax()
+{
+	real totalTax;
+	
+	EventhandlerResult result;
+	this.applyDiscountDelegate(this.ReceiptTotal, result);
+	this.ReceiptTotal = result.result();
+
+	totalTax = this.ReceiptTotal * this.TaxRate;
+
+	return totalTax;
+}
+
+
+
+
+
 Event handling
+
+-is exactly like the performCreate(), onDelete(), onInsert(), componentDidMount(), componentWillMount(), events and methods that act as events in the languages you've learned like JavaScript, and Python
+-we can override an event handler by creating a class
+-copy the onInserting event in the CustTable table that we have included in our project via importing
+-create a regular class named DBFMCustTableHandler and paste the onInserting event that we copied in the class
+
+class DBFMCustTableHandler
+{
+	[DataEventHandler(tableStr(CustTable), DataEventType::Inserting)]
+	public static void CustTable_onInserting(Common sender, DataEventArgs e)
+	{
+		CustTable cust_table = sender;
+		if(str2int(cust_table.CreditRating) < 200)
+		{
+			cust_table.Blocked = CustVendorBlocked::All;
+			info("the customer has been placed on hold due to low credit rating. Please review);
+		}
+	}
+}	
+
+
 
 DAY 6
 Reports
@@ -41,6 +725,8 @@ Security basics
 DAY 7
 Data entity
 Power BI
+
+
 
 ​
 
