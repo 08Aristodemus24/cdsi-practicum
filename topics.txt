@@ -460,7 +460,7 @@ public class DBFMVehicleTable extends common
 Day 5
 Code extension - but what to use extensions or by clicking the override option in the tables that we have, I guess overriding the functionality of a table 
 
-EXERCISE 1:
+Activity 2:
 - set initial value of Year to current date (I guess we can override here the this.initValue() method of a table, use today())
 - add validation "year must not be greater than current date"
 - add year on dialog (simple Dialog.addField(extendedTypeStr(DBFMYearTest), "year");)
@@ -626,7 +626,7 @@ public class DBFMVehicleTable extends common
 -becuse validation of VIN is written in our this.getFieldValues() method we must now include it in the this.validateWrite() method
 
 
-Exercise 2:
+Activity 3:
 -using chain of command, set th einitial value of the field VengGroup in the VendTable to the first VendGroup from VendGroup table
 -therefore import or include this in our model parameters this VendTable
 -build and open accounts payable > vendors > all vendors
@@ -637,7 +637,6 @@ DBFMVendTable_Extension.xpp
 [ExtensionOf(tableStr(VendTable))]
 final class DBFMVendTable_Extension
 {
-
 	public void initValue()
 	{
 		VendGroup vendGroup;
@@ -653,7 +652,6 @@ final class DBFMVendTable_Extension
 		// so this is the class it now uses overall and the initValue() of the base class is not anymore
 		// the initValue() method being called but rather this declaration in our extension
 	}
-
 }
 
 Delegates allow us to access elements in higher models from a lower model. Below is a model heirarchy
@@ -724,7 +722,7 @@ class DBFMCustTableHandler
 -create another class and paste the onInitialized method
 
 file: DBFMFMRentalHandler.xpp
-class DBFMFMRentalHandler.xpp
+class DBFMFMRentalHandler
 {
 	[FormEventHandler(formStr(FMRental), FormEventType::Initialized]
 	public static void FMRental_OnInitialized(xFormRun sender, FormEventArgs e)
@@ -746,7 +744,7 @@ class DBFMFMRentalHandler.xpp
 		
 	}
 
-	[FormControlEventHandler(formStr(FMRental, FMRental_StateCopy1), FormControlEventType::Modified]
+	[FormControlEventHandler(formControlStr(FMRental, FMRental_StateCopy1), FormControlEventType::Modified]
 	public static void FMRental_StateCopy1_OnModified(FormControl sender, FormControlEventArgs e)
 	{
 		//FMRental_StateCopy1 fmr_sc = sender;	
@@ -762,11 +760,11 @@ class DBFMFMRentalHandler.xpp
 	public static void FMRental_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
 	{
 		FormRun form_run = sender.formRun();
-		
+				
 		// access this like a tree with its nodes and subnodes
 		// to gain access to the field of the form "value" itself
 		FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental_StateCopy1));
-
+		
 		/* if(fmrental_state_copy_1.valueStr() == "Complete")
 		{	
 			fmrental_state_copy_1.enabled(false);
@@ -775,16 +773,141 @@ class DBFMFMRentalHandler.xpp
 		{
 			fmrental_state_copy_1.enabled(true);
 		} */
-
-		// shorthand of the above
+		
+		/* // shorthand of the above
 		fmrental_state_copy_1.enabled(fmrental_state_copy_1.valueStr() == "Complete" ? false : true);		
+		info(strFmt("state is initialized as: %1", fmrental_state_copy_1.valueStr())); */
 
-		info(strFmt("state is initialized as: %1", fmrental_state_copy_1.valueStr()));
+		FMRental fm_rental = sender.cursor();
+		FormDataObject fm_rental_state = sender.object(fieldNum(FMRental, State));
+
+		fm_rental_state.enabled(fm_rental.State != FMReservatioState::Complete);
+		info(strFmt("state is initialized as: %1", fm_rental.State));		
+
+		
 	}
+
+	[FormDataFieldEventHandler(formDataFieldStr(FMRental, FMRental, state), FormDataFieldEventType::Modified)]
+	public static void State_OnModified(FormDataObject sender, FormDataFieldEventArgs e)
+	{
+
+		// because the field is an enum we must compare the field_val
+		// to an enum value
+		anytype field_val = sender.getValue();
+		
+		/* if(sender.getValue() == FMReservationState::Complete)
+		{
+			sender.enabled(false);
+		}
+		else
+		{
+			sender.enabled(true);
+		} */
+
+		sender.enabled(sender.getValue() != FMReservationState::Complete);
+		info(strFmt("state has been modified to: %1", sender.getValue()));
+	}
+
+	
 }
 
 -sabi na nga eh...to do this we need to go to a specific entity instance and disable the field there. Kasi wala tayo namention na specific instance so nastuck tayo sa form design lang mismo
 -we need to access a specific instance, and what instance is it, yes the instances only with fields set to Complete
+[<node all words with capitalized first letters>EventHandler(<node all words with capitalized first letters except first word with first lowercase first letter>Str(<...args>), <node all words with capitalized first letters>EventType::<EventType>)]
+public static void <naem of the event handler or event to be overriden>(<...args>)
+{
+
+}
+
+Activity 4:
+-using event handlers disable field "Group" on all vendors form if "Group" has a value, this means that even in cases of inserting a record, updating a record, upon the loading of a record the records must be checked to see if the their group fields are blank
+-disable field "UPS zone" on all vendors > invoice and delivery > Delivery if "UPS zone" has a vlaue
+
+file: DBFMVendHandler.xpp
+class DBFMVendHandler.xpp
+{
+	[FormDataSourceEventHandler(formDataSourceStr(VendTable, VendTable), FormDataSourceEventType::Activated)]
+	public static void VendTable_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
+	{
+		VendTable vend_table = sender.cursor();
+		FormDataObject vend_table_fzone = sender.object(fieldNum(VendTable, FreightZone));
+		vend_table_fzone.enable(!vend_table.FreightZone);
+	}
+}
+
+
+Table Extensions
+-the reason why you can't create extension is because the object whether table, form, menu is not imported yet in your project
+-so add FMRental table to our project
+-add the vehicle id of our DBFMVehicleTableTest to the fields
+-add a primary key relation
+-use set the properties like assocaiation, cardinality, relationship type and on delete to its respective values
+-add a normal field to the relation and set field to vehicle id
+-set the related field to the vehicle id as well
+
+file: DBFMVendTable_Extension.xpp
+[ExtensionOf(tableStr(VendTable))]
+final class DBFMVendTable_Extension
+{
+	public void initValue()
+	{
+		VendGroup vendGroup;
+
+		// ah ok because fields tables have internally no values
+		// then the initValue() method is called to initialize the fields to these values
+		// if there is no setting of any field then we can place next initValue() 
+		// either at the top or at the bottom
+		this.VendGroup = (select firstonly VendGroup from vendGroup).VendGroup;
+		next initValue();
+
+		// remember we can now dictate the behavior of the Vendtable because we have already extended it,
+		// so this is the class it now uses overall and the initValue() of the base class is not anymore
+		// the initValue() method being called but rather this declaration in our extension
+	}
+
+	[SysClientCacheDataMethodAttribute(true)]
+	display str customVendGroup()
+	{
+		return "DBFM_" + this.VendGroup
+	}
+}
+
+
+-create an extension of the VendTable form
+-go to the pattern tab of the VendTable form and under the MainTab sub pattern di ko na alam kung ano add a string which will represent our custom group
+-set the properties data method to the method that we made which is customVendGroup under our extended VendTable, DBFMVendTable_Extension
+-set hte data source to our VendTable
+-set the label to "Custom Group"
+
+
+
+Activity 5a:
+-add vehicle id field from DBFMVehicleTableTest on VendTable (do this by creating the extension first)
+-Add relationship to DBFMVehicleTable cardinality: zeroone, related table cardinality: exactlyone, relationship type: association
+
+Activity 5b:
+-set label of VendGroup field on VendTable to "Vendor group" by using label files
+-open table browser of VendTable to check the additional field
+-open all vendors to check the updated label
+
+
+
+Form Extensions:
+-extend the FMRental form by importing it again in our project and searching it in the AOT, and create an extension of it in our project
+-because we created an extension earlier of the FMRental table the field which is vehicle id would have been added and the relation it had to our DBFMVehicleTableTest
+-we add this field to a sub pattern "info group" under the main pattern "tab details" in our design pattern tab 
+-we add another data source, which will be our DBFMVehicleTableTest and set this new data source, join source property to the FMRental datasource, its allow create, delete, insert at end and edit to no
+-drag the field group identification of our data source DBFMVehicleTableTest to the "tab details" > "line view" > "line view tab" > "line view header"
+
+
+Activity 6:
+-extend All Vendors form
+-add the vehicle id field on the grid and place beside the name field of the allvendors form
+-add vehicle id and VIN on invoice and delivery > delivery. After destination code
+-display most recent service start date (from DBFMVehicleMaintenance) of vehicle next to VIN
+
+3:10:00
+
 
 DAY 6
 Reports
