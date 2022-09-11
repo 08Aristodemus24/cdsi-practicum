@@ -702,6 +702,7 @@ Event handling
 -copy the onInserting event in the CustTable table that we have included in our project via importing
 -create a regular class named DBFMCustTableHandler and paste the onInserting event that we copied in the class
 
+file: DBFMCustTableHandler.xpp
 class DBFMCustTableHandler
 {
 	[DataEventHandler(tableStr(CustTable), DataEventType::Inserting)]
@@ -717,6 +718,73 @@ class DBFMCustTableHandler
 }	
 
 
+
+-import FMRental forms by checking the FleetManagement package/model
+-copy event handler onInitialized
+-create another class and paste the onInitialized method
+
+file: DBFMFMRentalHandler.xpp
+class DBFMFMRentalHandler.xpp
+{
+	[FormEventHandler(formStr(FMRental), FormEventType::Initialized]
+	public static void FMRental_OnInitialized(xFormRun sender, FormEventArgs e)
+	{
+		info("initialized form event handler");
+
+		FormRun form_run = sender;
+		
+		// access this like a tree with its nodes and subnodes
+		// to gain access to the field of the form "value" itself
+		FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental_StateCopy1));
+		
+		if(fmrental_state_copy_1.valueStr() == "Complete")
+		{	
+			fmrental_state_copy_1.enabled(false);
+		}
+
+		info(strFmt("state is initialized as: %1", fmrental_state_copy_1.valueStr()));
+		
+	}
+
+	[FormControlEventHandler(formStr(FMRental, FMRental_StateCopy1), FormControlEventType::Modified]
+	public static void FMRental_StateCopy1_OnModified(FormControl sender, FormControlEventArgs e)
+	{
+		//FMRental_StateCopy1 fmr_sc = sender;	
+		// when valueStr() has value "complete" set the form to disabled
+		if(sender.valueStr() == "Complete")
+		{
+			sender.enabled(false);
+		}
+		info("state %1 has been modified", sender.valueStr());
+	}
+
+	[FormDataSourceEventHandler(formDataSourceStr(FMRental, FMRental), FormDataSourceEventType::Activated)]
+	public static void FMRental_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
+	{
+		FormRun form_run = sender.formRun();
+		
+		// access this like a tree with its nodes and subnodes
+		// to gain access to the field of the form "value" itself
+		FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental_StateCopy1));
+
+		/* if(fmrental_state_copy_1.valueStr() == "Complete")
+		{	
+			fmrental_state_copy_1.enabled(false);
+		}
+		else
+		{
+			fmrental_state_copy_1.enabled(true);
+		} */
+
+		// shorthand of the above
+		fmrental_state_copy_1.enabled(fmrental_state_copy_1.valueStr() == "Complete" ? false : true);		
+
+		info(strFmt("state is initialized as: %1", fmrental_state_copy_1.valueStr()));
+	}
+}
+
+-sabi na nga eh...to do this we need to go to a specific entity instance and disable the field there. Kasi wala tayo namention na specific instance so nastuck tayo sa form design lang mismo
+-we need to access a specific instance, and what instance is it, yes the instances only with fields set to Complete
 
 DAY 6
 Reports
