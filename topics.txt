@@ -963,6 +963,9 @@ Reports (sql server reporting service)
 -right click the outside of the report layout and click report properties to change the margin, paper size, paper orientation etc.
 
 
+activity 7:
+-from vehicle maintenance list page, create a button that will display vehicle information and list all maintnance details related on the selected vehicle
+-how does the report somehow now what report to display based on the selected row
 
 
 Security basics
@@ -972,8 +975,11 @@ Data entity
 Power BI
 
 
+
 weaknesses:
 difficulty wrapping my head around sql select statements, since the variable used to represent a table is used also to take in the would be value of the selected rows of a table
+- why a variable is without instantiation to a table is because that variable anyway will hold a specific entity instance of the table by virtue of using the select statement
+- unlike select statements in sql select statements in x++ only return one instance of an entity
 fields in tables and forms - by default just set the tables properties to yoru master values and then if you are going to let the user edit something or create or delete then set these on the forms object instead. Instead of always having to change the master property values of a table
 overrriding methods and accessing the tables or forms within overriden methods of tables and forms
 architecture of the whole system
