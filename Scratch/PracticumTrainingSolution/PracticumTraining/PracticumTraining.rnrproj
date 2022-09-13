@@ -81,15 +81,35 @@
       <Name>DBFMFMRentalFormHandler</Name>
       <Link>Classes\DBFMFMRentalFormHandler</Link>
     </Content>
+    <Content Include="AxClass\DBFMVehicleContract">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleContract</Name>
+      <Link>Classes\DBFMVehicleContract</Link>
+    </Content>
+    <Content Include="AxClass\DBFMVehicleController">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleController</Name>
+      <Link>DBFMVehicleController</Link>
+    </Content>
+    <Content Include="AxClass\DBFMVehicleDP">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDP</Name>
+      <Link>DBFMVehicleDP</Link>
+    </Content>
     <Content Include="AxClass\DBFMVehicleEntry_">
       <SubType>Content</SubType>
       <Name>DBFMVehicleEntry_</Name>
       <Link>Classes\DBFMVehicleEntry_</Link>
     </Content>
+    <Content Include="AxClass\DBFMVehicleUIBuilder">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleUIBuilder</Name>
+      <Link>DBFMVehicleUIBuilder</Link>
+    </Content>
     <Content Include="AxClass\DBFMVendFormHandler">
       <SubType>Content</SubType>
       <Name>DBFMVendFormHandler</Name>
-      <Link>DBFMVendFormHandler</Link>
+      <Link>Classes\DBFMVendFormHandler</Link>
     </Content>
     <Content Include="AxClass\DevBasics_">
       <SubType>Content</SubType>
@@ -226,6 +246,11 @@
       <Name>DBFMVehicleType_</Name>
       <Link>Base Enums\DBFMVehicleType_</Link>
     </Content>
+    <Content Include="AxFormExtension\FMRental.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>FMRental.DevelopmentBasicsFMS</Name>
+      <Link>Form Extensions\FMRental.DevelopmentBasicsFMS</Link>
+    </Content>
     <Content Include="AxFormExtension\VendTable.DevelopmentBasicsFMS">
       <SubType>Content</SubType>
       <Name>VendTable.DevelopmentBasicsFMS</Name>
@@ -291,6 +316,11 @@
       <Name>DBFMVehicleMaintenanceListMenuItem</Name>
       <Link>Menu Items\DBFMVehicleMaintenanceListMenuItem</Link>
     </Content>
+    <Content Include="AxMenuItemOutput\DBFMVehicleOutputMenuItem">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleOutputMenuItem</Name>
+      <Link>Menu Items\DBFMVehicleOutputMenuItem</Link>
+    </Content>
     <Content Include="AxMenu\VehicleMenu_">
       <SubType>Content</SubType>
       <Name>VehicleMenu_</Name>
@@ -306,10 +336,20 @@
       <Name>DBFMVehicleQuery_</Name>
       <Link>Queries\DBFMVehicleQuery_</Link>
     </Content>
+    <Content Include="AxReport\DBFMVehicleReport">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleReport</Name>
+      <Link>Reports\DBFMVehicleReport</Link>
+    </Content>
     <Content Include="AxTableExtension\CustTable.DevelopmentBasicsFMS">
       <SubType>Content</SubType>
       <Name>CustTable.DevelopmentBasicsFMS</Name>
       <Link>Table Extensions\CustTable.DevelopmentBasicsFMS</Link>
+    </Content>
+    <Content Include="AxTableExtension\FMRental.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>FMRental.DevelopmentBasicsFMS</Name>
+      <Link>Table Extensions\FMRental.DevelopmentBasicsFMS</Link>
     </Content>
     <Content Include="AxTableExtension\VendTable.DevelopmentBasicsFMS">
       <SubType>Content</SubType>
@@ -320,6 +360,11 @@
       <SubType>Content</SubType>
       <Name>DBFMVehicleMaintenanceTable</Name>
       <Link>Tables\DBFMVehicleMaintenanceTable</Link>
+    </Content>
+    <Content Include="AxTable\DBFMVehicleReportTable">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleReportTable</Name>
+      <Link>Tables\DBFMVehicleReportTable</Link>
     </Content>
     <Content Include="AxTable\DBFMVehicleTable">
       <SubType>Content</SubType>
@@ -346,6 +391,7 @@
     <Folder Include="Menu Items" />
     <Folder Include="Form Extensions" />
     <Folder Include="Menu Extensions" />
+    <Folder Include="Reports" />
     <Folder Include="Table Extensions" />
     <Folder Include="Tables" />
     <Folder Include="Queries" />

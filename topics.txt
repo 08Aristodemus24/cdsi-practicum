@@ -1,5 +1,5 @@
 ﻿
-time mark (Event Handlign 6PM2): 17:35
+time mark (reports): 57:12
 
 topics:
 learn what you need to know then study those that you vaguely know because of time restriction deply
@@ -945,15 +945,22 @@ Reports (sql server reporting service)
 -consider page layout page size margins if it is pre-printed or free form when creating a report forom scratch
 -pre-printed reports - already ahve a printed form layout
 
--create a temp table
+-create temporary table
 -create contract class
--create RDP
--create report design
+-create report data provider class
+-create report and report design (report needs to be deployed)
 -create controller class
--create output meny item
+-create output menu item
 -run report
 
 
+
+-add a query property value to the dataset nodes element we created which is DBFMVehicleReportDS
+-add new precision design under the precision design node of the report
+-in the newly added precision design node right click and click edit using designer which will open up another tab where we can design the report layout shown to the user
+-you can add a header or foot to the report body
+-in there port body add the ff: Vehicle ID, VIN, Vehicle Gross Weight to do this right click the report layout and click insert. The object we will be inserting can be usually a text box, line, table, rectangle, list, image, chart etc.
+-right click the outside of the report layout and click report properties to change the margin, paper size, paper orientation etc.
 
 
 
@@ -966,6 +973,7 @@ Power BI
 
 
 weaknesses:
+difficulty wrapping my head around sql select statements, since the variable used to represent a table is used also to take in the would be value of the selected rows of a table
 fields in tables and forms - by default just set the tables properties to yoru master values and then if you are going to let the user edit something or create or delete then set these on the forms object instead. Instead of always having to change the master property values of a table
 overrriding methods and accessing the tables or forms within overriden methods of tables and forms
 architecture of the whole system
