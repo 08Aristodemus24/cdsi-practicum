@@ -1,5 +1,5 @@
-
-time mark (menus): 1:46:19
+﻿
+time mark (Event Handlign 6PM2): 17:35
 
 topics:
 learn what you need to know then study those that you vaguely know because of time restriction deply
@@ -20,6 +20,10 @@ read it and get the knowledge that you can
 then watch the videos again and see how they implement it, there is no need to read what is in the videos
 code along with your own version
 screenshot your code and save it with doodles for side notes
+
+
+password for serving the project loaclly
+
 
 
 
@@ -150,7 +154,7 @@ public class DBFMVehicleTable extends common
 
 
 
-
+----------------
 
 
 
@@ -620,7 +624,8 @@ public class DBFMVehicleTable extends common
 -create new DBFMVehicleTableGenFormTest
 -data source: DBFMVehicleTableTest
 -pattern: simple list
--add vehicle id, VIN, vehicle type code, year, make, model, gross vehicle weight, fuel level, inspect  date, service type code
+-add vehicle id, VIN, vehicle type code, year, make, model, gross vehicle weight, 
+fuel level, inspect  date, service type code
 -create DBFMVehicleGenMenuItem
 -add to OrganizationAdministration > Resources > Menus
 -becuse validation of VIN is written in our this.getFieldValues() method we must now include it in the this.validateWrite() method
@@ -720,10 +725,12 @@ class DBFMCustTableHandler
 -import FMRental forms by checking the FleetManagement package/model
 -copy event handler onInitialized
 -create another class and paste the onInitialized method
+-other events are also nested in the data sources node, besides the root form node itself like OnModified, OnActivated
 
 file: DBFMFMRentalHandler.xpp
 class DBFMFMRentalHandler
 {
+	// under: FMRental
 	[FormEventHandler(formStr(FMRental), FormEventType::Initialized]
 	public static void FMRental_OnInitialized(xFormRun sender, FormEventArgs e)
 	{
@@ -744,6 +751,7 @@ class DBFMFMRentalHandler
 		
 	}
 
+	// under: FMRental_StateCopy1 < InfoGroup < LineViewHeader < LineViewTab < LineView < TabDetails < TabPageDetails < Tab < FMRental Design Pattern
 	[FormControlEventHandler(formControlStr(FMRental, FMRental_StateCopy1), FormControlEventType::Modified]
 	public static void FMRental_StateCopy1_OnModified(FormControl sender, FormControlEventArgs e)
 	{
@@ -756,6 +764,7 @@ class DBFMFMRentalHandler
 		info("state %1 has been modified", sender.valueStr());
 	}
 
+	// under: events < FMRental < Data Sources < FMRental
 	[FormDataSourceEventHandler(formDataSourceStr(FMRental, FMRental), FormDataSourceEventType::Activated)]
 	public static void FMRental_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
 	{
@@ -786,7 +795,8 @@ class DBFMFMRentalHandler
 
 		
 	}
-
+	
+	// under: events < state < fields < FMRental < data sources < FMRental
 	[FormDataFieldEventHandler(formDataFieldStr(FMRental, FMRental, state), FormDataFieldEventType::Modified)]
 	public static void State_OnModified(FormDataObject sender, FormDataFieldEventArgs e)
 	{
@@ -818,6 +828,9 @@ public static void <naem of the event handler or event to be overriden>(<...args
 {
 
 }
+
+
+
 
 Activity 4:
 -using event handlers disable field "Group" on all vendors form if "Group" has a value, this means that even in cases of inserting a record, updating a record, upon the loading of a record the records must be checked to see if the their group fields are blank
@@ -882,7 +895,7 @@ final class DBFMVendTable_Extension
 
 
 Activity 5a:
--add vehicle id field from DBFMVehicleTableTest on VendTable (do this by creating the extension first)
+-add vehicle id field from DBFMVehicleTableTest on VendTable, and FMRental tables (do this by creating the extension first)
 -Add relationship to DBFMVehicleTable cardinality: zeroone, related table cardinality: exactlyone, relationship type: association
 
 Activity 5b:
@@ -894,7 +907,7 @@ Activity 5b:
 
 Form Extensions:
 -extend the FMRental form by importing it again in our project and searching it in the AOT, and create an extension of it in our project
--because we created an extension earlier of the FMRental table the field which is vehicle id would have been added and the relation it had to our DBFMVehicleTableTest
+-because we created an extension earlier of the FMRental table (correction the VendTable table) the field which is vehicle id would have been added and the relation it had to our DBFMVehicleTableTest
 -we add this field to a sub pattern "info group" under the main pattern "tab details" in our design pattern tab 
 -we add another data source, which will be our DBFMVehicleTableTest and set this new data source, join source property to the FMRental datasource, its allow create, delete, insert at end and edit to no
 -drag the field group identification of our data source DBFMVehicleTableTest to the "tab details" > "line view" > "line view tab" > "line view header"
@@ -905,12 +918,46 @@ Activity 6:
 -add the vehicle id field on the grid and place beside the name field of the allvendors form
 -add vehicle id and VIN on invoice and delivery > delivery. After destination code
 -display most recent service start date (from DBFMVehicleMaintenance) of vehicle next to VIN
-
-3:10:00
+-VIN must not be editable
 
 
 DAY 6
-Reports
+Reports (sql server reporting service)
+
+-contract class
+-report class defines parameters to the ssrs report
+
+-UIBuilder class
+-add any type of fields
+
+-controller class
+-modifying a report query based on the ipnput data
+-modifying report contract data based on the in data
+-control a report parameters dialog
+-to create extend SrsReportRunController class
+
+-report data provider class (RDP)
+-RDP is the data source type when we add a new dataset to the report in VS
+-RDP is a class that executes the business logic process the data and returns a dataset which is rendered/shown in the report
+-cannot directly use a query to access the data from the database
+-data has to prepare on teh basis of business logic
+
+-consider page layout page size margins if it is pre-printed or free form when creating a report forom scratch
+-pre-printed reports - already ahve a printed form layout
+
+-create a temp table
+-create contract class
+-create RDP
+-create report design
+-create controller class
+-create output meny item
+-run report
+
+
+
+
+
+
 Security basics
 
 DAY 7
@@ -918,7 +965,10 @@ Data entity
 Power BI
 
 
-
+weaknesses:
+fields in tables and forms - by default just set the tables properties to yoru master values and then if you are going to let the user edit something or create or delete then set these on the forms object instead. Instead of always having to change the master property values of a table
+overrriding methods and accessing the tables or forms within overriden methods of tables and forms
+architecture of the whole system
 ​
 
 

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <BuildTasksDirectory Condition=" '$(BuildTasksDirectory)' == ''">$(MSBuildProgramFiles32)\MSBuild\Microsoft\Dynamics\AX</BuildTasksDirectory>
+    <Model>DevelopmentBasicsFMS</Model>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <OutputPath>bin</OutputPath>
+    <SchemaVersion>2.0</SchemaVersion>
+    <GenerateCrossReferences>True</GenerateCrossReferences>
+    <RunAppCheckerRules>False</RunAppCheckerRules>
+    <LogAppcheckerDiagsAsErrors>False</LogAppcheckerDiagsAsErrors>
+    <ProjectGuid>{85fbf53b-a686-4a47-a470-8b688417f2f9}</ProjectGuid>
+    <Name>PracticumTraining</Name>
+    <RootNamespace>PracticumTraining</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <Configuration>Debug</Configuration>
+    <DBSyncInBuild>False</DBSyncInBuild>
+    <GenerateFormAdaptors>False</GenerateFormAdaptors>
+    <Company>
+    </Company>
+    <Partition>initial</Partition>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DataEntityExpandParentChildRelations>False</DataEntityExpandParentChildRelations>
+    <DataEntityUseLabelTextAsFieldName>False</DataEntityUseLabelTextAsFieldName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="AxClass\CustomerEntry">
+      <SubType>Content</SubType>
+      <Name>CustomerEntry</Name>
+      <Link>Classes\CustomerEntry</Link>
+    </Content>
+    <Content Include="AxClass\CustTableDBFM_Extension">
+      <SubType>Content</SubType>
+      <Name>CustTableDBFM_Extension</Name>
+      <Link>Classes\CustTableDBFM_Extension</Link>
+    </Content>
+    <Content Include="AxClass\DatabaseManipulation_">
+      <SubType>Content</SubType>
+      <Name>DatabaseManipulation_</Name>
+      <Link>Classes\DatabaseManipulation_</Link>
+    </Content>
+    <Content Include="AxClass\DBFMBaseClass">
+      <SubType>Content</SubType>
+      <Name>DBFMBaseClass</Name>
+      <Link>Classes\DBFMBaseClass</Link>
+    </Content>
+    <Content Include="AxClass\DBFMBaseClass_Extension">
+      <SubType>Content</SubType>
+      <Name>DBFMBaseClass_Extension</Name>
+      <Link>Classes\DBFMBaseClass_Extension</Link>
+    </Content>
+    <Content Include="AxClass\DBFMChildClass">
+      <SubType>Content</SubType>
+      <Name>DBFMChildClass</Name>
+      <Link>Classes\DBFMChildClass</Link>
+    </Content>
+    <Content Include="AxClass\DBFMChildClass_Extension">
+      <SubType>Content</SubType>
+      <Name>DBFMChildClass_Extension</Name>
+      <Link>Classes\DBFMChildClass_Extension</Link>
+    </Content>
+    <Content Include="AxClass\DBFMCustTableHandler">
+      <SubType>Content</SubType>
+      <Name>DBFMCustTableHandler</Name>
+      <Link>Classes\DBFMCustTableHandler</Link>
+    </Content>
+    <Content Include="AxClass\DBFMExtendedClassesTest">
+      <SubType>Content</SubType>
+      <Name>DBFMExtendedClassesTest</Name>
+      <Link>Classes\DBFMExtendedClassesTest</Link>
+    </Content>
+    <Content Include="AxClass\DBFMFMRentalFormHandler">
+      <SubType>Content</SubType>
+      <Name>DBFMFMRentalFormHandler</Name>
+      <Link>Classes\DBFMFMRentalFormHandler</Link>
+    </Content>
+    <Content Include="AxClass\DBFMVehicleEntry_">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleEntry_</Name>
+      <Link>Classes\DBFMVehicleEntry_</Link>
+    </Content>
+    <Content Include="AxClass\DBFMVendFormHandler">
+      <SubType>Content</SubType>
+      <Name>DBFMVendFormHandler</Name>
+      <Link>DBFMVendFormHandler</Link>
+    </Content>
+    <Content Include="AxClass\DevBasics_">
+      <SubType>Content</SubType>
+      <Name>DevBasics_</Name>
+      <Link>Classes\DevBasics_</Link>
+    </Content>
+    <Content Include="AxClass\DialogSample_">
+      <SubType>Content</SubType>
+      <Name>DialogSample_</Name>
+      <Link>Classes\DialogSample_</Link>
+    </Content>
+    <Content Include="AxClass\Loops_">
+      <SubType>Content</SubType>
+      <Name>Loops_</Name>
+      <Link>Classes\Loops_</Link>
+    </Content>
+    <Content Include="AxClass\VendTableDBFM_Extension">
+      <SubType>Content</SubType>
+      <Name>VendTableDBFM_Extension</Name>
+      <Link>Classes\VendTableDBFM_Extension</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMEngineDescription">
+      <SubType>Content</SubType>
+      <Name>DBFMEngineDescription</Name>
+      <Link>EDT Strings\DBFMEngineDescription</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMFuelLevel">
+      <SubType>Content</SubType>
+      <Name>DBFMFuelLevel</Name>
+      <Link>EDT Reals\DBFMFuelLevel</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMFuelTypeCode">
+      <SubType>Content</SubType>
+      <Name>DBFMFuelTypeCode</Name>
+      <Link>EDT Enums\DBFMFuelTypeCode</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMInspectionDate">
+      <SubType>Content</SubType>
+      <Name>DBFMInspectionDate</Name>
+      <Link>EDT Dates\DBFMInspectionDate</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMMake">
+      <SubType>Content</SubType>
+      <Name>DBFMMake</Name>
+      <Link>EDT Strings\DBFMMake</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMMileage_">
+      <SubType>Content</SubType>
+      <Name>DBFMMileage_</Name>
+      <Link>EDT Integers\DBFMMileage_</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMModel">
+      <SubType>Content</SubType>
+      <Name>DBFMModel</Name>
+      <Link>EDT Strings\DBFMModel</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMNotes">
+      <SubType>Content</SubType>
+      <Name>DBFMNotes</Name>
+      <Link>EDT Strings\DBFMNotes</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMNumberOfDoors_">
+      <SubType>Content</SubType>
+      <Name>DBFMNumberOfDoors_</Name>
+      <Link>EDT Integers\DBFMNumberOfDoors_</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMSeatingCapacity">
+      <SubType>Content</SubType>
+      <Name>DBFMSeatingCapacity</Name>
+      <Link>EDT Integers\DBFMSeatingCapacity</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMServiceEndDate">
+      <SubType>Content</SubType>
+      <Name>DBFMServiceEndDate</Name>
+      <Link>EDT Dates\DBFMServiceEndDate</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMServiceStartDate">
+      <SubType>Content</SubType>
+      <Name>DBFMServiceStartDate</Name>
+      <Link>EDT Dates\DBFMServiceStartDate</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMServiceTypeCode">
+      <SubType>Content</SubType>
+      <Name>DBFMServiceTypeCode</Name>
+      <Link>EDT Enums\DBFMServiceTypeCode</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMThirdRowCode">
+      <SubType>Content</SubType>
+      <Name>DBFMThirdRowCode</Name>
+      <Link>EDT Enums\DBFMThirdRowCode</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMVehicleGrossWeight">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleGrossWeight</Name>
+      <Link>EDT Integers\DBFMVehicleGrossWeight</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMVehicleID">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleID</Name>
+      <Link>EDT Integers\DBFMVehicleID</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMVehicleTypeCode_">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleTypeCode_</Name>
+      <Link>EDT Enums\DBFMVehicleTypeCode_</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMVIN">
+      <SubType>Content</SubType>
+      <Name>DBFMVIN</Name>
+      <Link>EDT Strings\DBFMVIN</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMYear">
+      <SubType>Content</SubType>
+      <Name>DBFMYear</Name>
+      <Link>EDT Dates\DBFMYear</Link>
+    </Content>
+    <Content Include="AxEnum\DBFMFuelType">
+      <SubType>Content</SubType>
+      <Name>DBFMFuelType</Name>
+      <Link>Base Enums\DBFMFuelType</Link>
+    </Content>
+    <Content Include="AxEnum\DBFMServiceType_">
+      <SubType>Content</SubType>
+      <Name>DBFMServiceType_</Name>
+      <Link>Base Enums\DBFMServiceType_</Link>
+    </Content>
+    <Content Include="AxEnum\DBFMThirdRow">
+      <SubType>Content</SubType>
+      <Name>DBFMThirdRow</Name>
+      <Link>Base Enums\DBFMThirdRow</Link>
+    </Content>
+    <Content Include="AxEnum\DBFMVehicleType_">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleType_</Name>
+      <Link>Base Enums\DBFMVehicleType_</Link>
+    </Content>
+    <Content Include="AxFormExtension\VendTable.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>VendTable.DevelopmentBasicsFMS</Name>
+      <Link>Form Extensions\VendTable.DevelopmentBasicsFMS</Link>
+    </Content>
+    <Content Include="AxForm\DBFMVehicleDetailsForm">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDetailsForm</Name>
+      <Link>Forms\DBFMVehicleDetailsForm</Link>
+    </Content>
+    <Content Include="AxForm\DBFMVehicleGenForm">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleGenForm</Name>
+      <Link>Forms\DBFMVehicleGenForm</Link>
+    </Content>
+    <Content Include="AxForm\DBFMVehicleListForm">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleListForm</Name>
+      <Link>Forms\DBFMVehicleListForm</Link>
+    </Content>
+    <Content Include="AxForm\DBFMVehicleMaintenanceDetailsForm">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceDetailsForm</Name>
+      <Link>Forms\DBFMVehicleMaintenanceDetailsForm</Link>
+    </Content>
+    <Content Include="AxForm\DBFMVehicleMaintenanceListForm">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceListForm</Name>
+      <Link>Forms\DBFMVehicleMaintenanceListForm</Link>
+    </Content>
+    <Content Include="AxLabelFile\DBFMLabel_en-US">
+      <SubType>Content</SubType>
+      <Name>DBFMLabel_en-US</Name>
+      <Link>Labels\DBFMLabel_en-US</Link>
+    </Content>
+    <Content Include="AxMenuExtension\OrganizationAdministration.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>OrganizationAdministration.DevelopmentBasicsFMS</Name>
+      <Link>Menu Extensions\OrganizationAdministration.DevelopmentBasicsFMS</Link>
+    </Content>
+    <Content Include="AxMenuItemDisplay\DBFMVehicleDetailMenuItem">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDetailMenuItem</Name>
+      <Link>Menu Items\DBFMVehicleDetailMenuItem</Link>
+    </Content>
+    <Content Include="AxMenuItemDisplay\DBFMVehicleGenMenuItem">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleGenMenuItem</Name>
+      <Link>Menu Items\DBFMVehicleGenMenuItem</Link>
+    </Content>
+    <Content Include="AxMenuItemDisplay\DBFMVehicleListMenuItem">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleListMenuItem</Name>
+      <Link>Menu Items\DBFMVehicleListMenuItem</Link>
+    </Content>
+    <Content Include="AxMenuItemDisplay\DBFMVehicleMaintenanceDetailMenuItem">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceDetailMenuItem</Name>
+      <Link>Menu Items\DBFMVehicleMaintenanceDetailMenuItem</Link>
+    </Content>
+    <Content Include="AxMenuItemDisplay\DBFMVehicleMaintenanceListMenuItem">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceListMenuItem</Name>
+      <Link>Menu Items\DBFMVehicleMaintenanceListMenuItem</Link>
+    </Content>
+    <Content Include="AxMenu\VehicleMenu_">
+      <SubType>Content</SubType>
+      <Name>VehicleMenu_</Name>
+      <Link>Menu\VehicleMenu_</Link>
+    </Content>
+    <Content Include="AxQuery\DBFMVehicleMaintenanceQuery">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceQuery</Name>
+      <Link>Queries\DBFMVehicleMaintenanceQuery</Link>
+    </Content>
+    <Content Include="AxQuery\DBFMVehicleQuery_">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleQuery_</Name>
+      <Link>Queries\DBFMVehicleQuery_</Link>
+    </Content>
+    <Content Include="AxTableExtension\CustTable.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>CustTable.DevelopmentBasicsFMS</Name>
+      <Link>Table Extensions\CustTable.DevelopmentBasicsFMS</Link>
+    </Content>
+    <Content Include="AxTableExtension\VendTable.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>VendTable.DevelopmentBasicsFMS</Name>
+      <Link>Table Extensions\VendTable.DevelopmentBasicsFMS</Link>
+    </Content>
+    <Content Include="AxTable\DBFMVehicleMaintenanceTable">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceTable</Name>
+      <Link>Tables\DBFMVehicleMaintenanceTable</Link>
+    </Content>
+    <Content Include="AxTable\DBFMVehicleTable">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleTable</Name>
+      <Link>Tables\DBFMVehicleTable</Link>
+    </Content>
+    <Content Include="DBFMLabel.en-US.label.txt">
+      <SubType>Content</SubType>
+      <Name>DBFMLabel.en-US.label.txt</Name>
+      <DependentUpon>AxLabelFile\DBFMLabel_en-US</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes" />
+    <Folder Include="Menu" />
+    <Folder Include="EDT Dates" />
+    <Folder Include="EDT Enums" />
+    <Folder Include="EDT Integers" />
+    <Folder Include="EDT Reals" />
+    <Folder Include="EDT Strings" />
+    <Folder Include="Forms" />
+    <Folder Include="Base Enums" />
+    <Folder Include="Labels" />
+    <Folder Include="Menu Items" />
+    <Folder Include="Form Extensions" />
+    <Folder Include="Menu Extensions" />
+    <Folder Include="Table Extensions" />
+    <Folder Include="Tables" />
+    <Folder Include="Queries" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.Common.targets" />
+  <Import Project="$(BuildTasksDirectory)\Microsoft.Dynamics.Framework.Tools.BuildTasks.targets" />
+</Project>

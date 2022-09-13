@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FC65038C-1B2F-41E1-A629-BED71D161FFF}") = "PracticumTraining (USR) [DevelopmentBasicsFMS]", "PracticumTraining\PracticumTraining.rnrproj", "{85FBF53B-A686-4A47-A470-8B688417F2F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85FBF53B-A686-4A47-A470-8B688417F2F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85FBF53B-A686-4A47-A470-8B688417F2F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E7C7B0B6-22DE-4450-9181-710F7E3CDFC7}
+	EndGlobalSection
+EndGlobal
