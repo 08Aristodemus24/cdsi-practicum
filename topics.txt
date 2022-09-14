@@ -1070,7 +1070,12 @@ activity 7:
 -the query is PurchPurchaseOrderDP.PurchPurchaseOrderHeader which is the method that uses the shall we say [SrsReportDatasetAttribute(tableStr(DBFMVehicleReportTable))] decorator
 -note: whenever a method of a data provider class uses this decorator it is what is part of the list of all choices for the query property of a dataset of a report
 -so search PurchPurchaseOrderHeader and create an extension for it. (This is a table BTW)
+-create another string extended data type named DBFMDescription and add it in our extended table
 
+-search PurchPurchaseOrder
+-duplicate it in our project
+-rename it
+-in the PurchPurchaseOrderDS dataset of the datasets node restore it so we can see the field we added earlier in the table since this dataset depends on this table for its query property
 
 Security basics
 
@@ -1087,6 +1092,9 @@ difficulty wrapping my head around sql select statements, since the variable use
 fields in tables and forms - by default just set the tables properties to yoru master values and then if you are going to let the user edit something or create or delete then set these on the forms object instead. Instead of always having to change the master property values of a table
 overrriding methods and accessing the tables or forms within overriden methods of tables and forms
 architecture of the whole system
+
+
+
 ​
 Salutation
 Good evening Maam/Sir
