@@ -14,6 +14,8 @@
     <ProjectGuid>{85fbf53b-a686-4a47-a470-8b688417f2f9}</ProjectGuid>
     <Name>PracticumTraining</Name>
     <RootNamespace>PracticumTraining</RootNamespace>
+    <StartupObject>DBFMVehicleListForm</StartupObject>
+    <StartupType>Form</StartupType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Configuration>Debug</Configuration>
@@ -89,22 +91,42 @@
     <Content Include="AxClass\DBFMVehicleController">
       <SubType>Content</SubType>
       <Name>DBFMVehicleController</Name>
-      <Link>DBFMVehicleController</Link>
+      <Link>Classes\DBFMVehicleController</Link>
     </Content>
     <Content Include="AxClass\DBFMVehicleDP">
       <SubType>Content</SubType>
       <Name>DBFMVehicleDP</Name>
-      <Link>DBFMVehicleDP</Link>
+      <Link>Classes\DBFMVehicleDP</Link>
     </Content>
     <Content Include="AxClass\DBFMVehicleEntry_">
       <SubType>Content</SubType>
       <Name>DBFMVehicleEntry_</Name>
       <Link>Classes\DBFMVehicleEntry_</Link>
     </Content>
+    <Content Include="AxClass\DBFMVehicleMaintenanceContract">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceContract</Name>
+      <Link>Classes\DBFMVehicleMaintenanceContract</Link>
+    </Content>
+    <Content Include="AxClass\DBFMVehicleMaintenanceController">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceController</Name>
+      <Link>Classes\DBFMVehicleMaintenanceController</Link>
+    </Content>
+    <Content Include="AxClass\DBFMVehicleMaintenanceDP">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceDP</Name>
+      <Link>Classes\DBFMVehicleMaintenanceDP</Link>
+    </Content>
+    <Content Include="AxClass\DBFMVehicleMaintenanceUIBuilder">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceUIBuilder</Name>
+      <Link>Classes\DBFMVehicleMaintenanceUIBuilder</Link>
+    </Content>
     <Content Include="AxClass\DBFMVehicleUIBuilder">
       <SubType>Content</SubType>
       <Name>DBFMVehicleUIBuilder</Name>
-      <Link>DBFMVehicleUIBuilder</Link>
+      <Link>Classes\DBFMVehicleUIBuilder</Link>
     </Content>
     <Content Include="AxClass\DBFMVendFormHandler">
       <SubType>Content</SubType>
@@ -130,6 +152,11 @@
       <SubType>Content</SubType>
       <Name>VendTableDBFM_Extension</Name>
       <Link>Classes\VendTableDBFM_Extension</Link>
+    </Content>
+    <Content Include="AxEdt\DBFMDescription">
+      <SubType>Content</SubType>
+      <Name>DBFMDescription</Name>
+      <Link>EDT Strings\DBFMDescription</Link>
     </Content>
     <Content Include="AxEdt\DBFMEngineDescription">
       <SubType>Content</SubType>
@@ -316,6 +343,11 @@
       <Name>DBFMVehicleMaintenanceListMenuItem</Name>
       <Link>Menu Items\DBFMVehicleMaintenanceListMenuItem</Link>
     </Content>
+    <Content Include="AxMenuItemOutput\DBFMVehicleMaintenanceOutputMenuItem">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceOutputMenuItem</Name>
+      <Link>Menu Items\DBFMVehicleMaintenanceOutputMenuItem</Link>
+    </Content>
     <Content Include="AxMenuItemOutput\DBFMVehicleOutputMenuItem">
       <SubType>Content</SubType>
       <Name>DBFMVehicleOutputMenuItem</Name>
@@ -336,10 +368,20 @@
       <Name>DBFMVehicleQuery_</Name>
       <Link>Queries\DBFMVehicleQuery_</Link>
     </Content>
+    <Content Include="AxReport\DBFMVehicleMaintenanceReport">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceReport</Name>
+      <Link>Reports\DBFMVehicleMaintenanceReport</Link>
+    </Content>
     <Content Include="AxReport\DBFMVehicleReport">
       <SubType>Content</SubType>
       <Name>DBFMVehicleReport</Name>
       <Link>Reports\DBFMVehicleReport</Link>
+    </Content>
+    <Content Include="AxReport\PurchPurchaseOrderDBFMS">
+      <SubType>Content</SubType>
+      <Name>PurchPurchaseOrderDBFMS</Name>
+      <Link>Report Copies\PurchPurchaseOrderDBFMS</Link>
     </Content>
     <Content Include="AxTableExtension\CustTable.DevelopmentBasicsFMS">
       <SubType>Content</SubType>
@@ -351,10 +393,20 @@
       <Name>FMRental.DevelopmentBasicsFMS</Name>
       <Link>Table Extensions\FMRental.DevelopmentBasicsFMS</Link>
     </Content>
+    <Content Include="AxTableExtension\PurchPurchaseOrderHeader.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>PurchPurchaseOrderHeader.DevelopmentBasicsFMS</Name>
+      <Link>Table Extensions\PurchPurchaseOrderHeader.DevelopmentBasicsFMS</Link>
+    </Content>
     <Content Include="AxTableExtension\VendTable.DevelopmentBasicsFMS">
       <SubType>Content</SubType>
       <Name>VendTable.DevelopmentBasicsFMS</Name>
       <Link>Table Extensions\VendTable.DevelopmentBasicsFMS</Link>
+    </Content>
+    <Content Include="AxTable\DBFMVehicleMaintenanceReportTable">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceReportTable</Name>
+      <Link>Tables\DBFMVehicleMaintenanceReportTable</Link>
     </Content>
     <Content Include="AxTable\DBFMVehicleMaintenanceTable">
       <SubType>Content</SubType>
@@ -391,6 +443,7 @@
     <Folder Include="Menu Items" />
     <Folder Include="Form Extensions" />
     <Folder Include="Menu Extensions" />
+    <Folder Include="Report Copies" />
     <Folder Include="Reports" />
     <Folder Include="Table Extensions" />
     <Folder Include="Tables" />

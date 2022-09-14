@@ -1,5 +1,5 @@
 ﻿
-time mark (reports): 57:12
+time mark (reports 1):
 
 topics:
 learn what you need to know then study those that you vaguely know because of time restriction deply
@@ -153,8 +153,6 @@ public class DBFMVehicleTable extends common
 
 
 
-
-----------------
 
 
 
@@ -922,6 +920,94 @@ Activity 6:
 
 
 DAY 6
+unknown methods and classes:
+
+SrsReportRunController
+SysOperationContractProcessingAttribute(classStr(DBFMVehicleMaintenanceUIBuilder))
+rpt_ctrlr.parmReportName(ssrsReportStr(DBFMVehiclMaintenanceReport, DBFMVehicleMaintenanceReportDesign));
+rpt_ctrlr.parmDialogCaption("<some caption>");
+rpt_ctrlr.parmArgs(_args)
+rpt_ctrlr.startOperation()
+this.parmReportContract().parmRdpContract()
+this.parmArgs().dataset()
+this.parmArgs()
+tableNum(DBFMVehicleMaintenanceTable)
+this.parmArgs().record() as DBFMVehicleMaintenanceTable;
+this.prePromtModiifyContract()
+
+[SrsReportParameterAttribute(classStr(DBFMVehicleMaintenanceContract))]
+SrsReportDataProviderPreProcessTempDB
+this.parmDataContract() as DBFMVehicleMaintenanceContract;
+this.processReport()
+[SrsReportDatasetAttribute(tableStr(DBFMVehicleMaintenanceReportTable))]
+
+
+[
+    DataContractAttribute,
+    SysOperationContractProcessingAttribute(classStr(DBFMVehicleMaintenanceUIBuilder))
+]
+[
+        DataMemberAttribute('VehicleId'),
+        SysOperationLabelAttribute('Vehicle Id')
+    ]
+
+[
+        DataMemberAttribute('ReleaseDate'),
+        SysOperationLabelAttribute('Release Date')
+    ]
+
+Dialog dialog = new Dialog("Create new customer");
+DialogField df_cust_acc = Dialog.addField(extendedTypeStr(CustVendAC), "Account number");
+df_cust_acc.value();
+
+cust_table.validateWrite()
+cust_table.insert()
+
+[ExtensionOf(tableStr(CustTable))]
+this.insert(DirPartyType _partyType, Name _name, boolean _updateCRM)
+str2Int(this.creditRating)
+
+[DataEventHandler(tableStr(CustTable), DataEventType::Inserting)]
+this.CustTable_onInserting(Common sender, DataEventArgs e)
+
+[FormEventHandler(formStr(FMRental), FormEventType::Initialized)]
+public static void FMRental_OnInitialized(xFormRun sender, FormEventArgs e)
+FormRun form_run = sender;
+FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental, FMRental_StateCopy1));
+fmrental_state_copy_1.valueStr()
+fmrental_state_copy_1.enabled(false)
+
+[FormControlEventHandler(formControlStr(FMRental, FMRental_StateCopy1), FormControlEventType::Modified)]
+public static void FMRental_StateCopy1_OnModified(FormControl sender, FormControlEventArgs e)
+sender.valueStr()
+sender.enabled(false)
+
+[FormDataSourceEventHandler(formDataSourceStr(FMRental, FMRental), FormDataSourceEventType::Activated)]
+public static void FMRental_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
+FormRun form_run = sender.formRun();
+FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental, FMRental_StateCopy1));
+FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental, FMRental_StateCopy1));
+FormDataObject fm_rental_state = sender.object(fieldNum(FMRental, State));
+fm_rental_state.enabled(fm_rental.State != FMReservationState::Complete);
+
+[FormDataFieldEventHandler(formDataFieldStr(FMRental, FMRental, State), FormDataFieldEventType::Modified)]
+public static void State_OnModified(FormDataObject sender, FormDataFieldEventArgs e)
+anytype field_val = sender.getValue();
+sender.enabled(sender.getValue() != FMReservationState::Complete);
+
+[FormDataSourceEventHandler(formDataSourceStr(VendTable, VendTable), FormDataSourceEventType::Activated)]
+public static void VendTable_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
+VendTable vend_table = sender.cursor();
+FormDataObject vend_table_fzone = sender.object(fieldNum(VendTable, FreightZone));
+vend_table_fzone.enabled(!vend_table.FreightZone);
+
+[ExtensionOf(tableStr(VendTable))]
+public void initValue()
+[SysClientCacheDataMethodAttribute(true)]
+
+
+
+
 Reports (sql server reporting service)
 
 -contract class
@@ -968,6 +1054,24 @@ activity 7:
 -how does the report somehow now what report to display based on the selected row
 
 
+2 ways on how to modify report layout of a built in report
+-report layout can be modified on controller class by overriding the standard controller class
+-report that uses print management can be modified by extending PrintMgmtReportFormatPopulator class to add new report layout
+-and also y extending PrintMgmtDocType class to identify which report layout will be used depends on document type
+
+-open in designer the built in VendPurchOrderJournal form
+-search for the PurchPurchaseOrderOriginal menu item button in the design pattern tab either by usign the main explorer or AOT search engine
+-open the menu item button in the designer or if used main explorer in searching right click the button and click go to menu item output PurchPurchaseOrderOriginal
+-since a output menu item uses a control class we use the information that will be provided in the menu items properties as basis for us to search the name of the class in the AOT
+-search the class name and view its code
+-search for PurchPurchaseOrderDP and view its code
+-search for the PurchPurchaseOrder report 
+-in its datasets node are the elements PurchPurchaseOrderLine and PurchPurchaseOrderDS, click the latter and see its query property
+-the query is PurchPurchaseOrderDP.PurchPurchaseOrderHeader which is the method that uses the shall we say [SrsReportDatasetAttribute(tableStr(DBFMVehicleReportTable))] decorator
+-note: whenever a method of a data provider class uses this decorator it is what is part of the list of all choices for the query property of a dataset of a report
+-so search PurchPurchaseOrderHeader and create an extension for it. (This is a table BTW)
+
+
 Security basics
 
 DAY 7
@@ -984,5 +1088,17 @@ fields in tables and forms - by default just set the tables properties to yoru m
 overrriding methods and accessing the tables or forms within overriden methods of tables and forms
 architecture of the whole system
 ​
+Salutation
+Good evening Maam/Sir
+
+
+introduction
+this is <insert name>
+
+body
+This is Larry Miguel Cueva po, just wanted to pass my updated version of last weeks activity report for the practicum
+
+closing
+
 
 
