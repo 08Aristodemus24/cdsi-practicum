@@ -1009,20 +1009,28 @@ public void initValue()
 
 
 Reports (sql server reporting service)
+-advantage of it is, it is built-in back-office document management capabilities
+-another advantage is that precision documents to comply with local regulatory business practices
+-parameterized views and drill-through navigations to other AX pages and other reports
 
--contract class
+Financial reporting
+-22 default financial reports are available that can be overridden
+-users can edit or create new reports
+-requires the proper privileges and duties
+
+Report contract class
 -report class defines parameters to the ssrs report
 
--UIBuilder class
+Report UIBuilder class
 -add any type of fields
 
--controller class
+Report controller class
 -modifying a report query based on the ipnput data
 -modifying report contract data based on the in data
 -control a report parameters dialog
 -to create extend SrsReportRunController class
 
--report data provider class (RDP)
+Report data provider class (RDP)
 -RDP is the data source type when we add a new dataset to the report in VS
 -RDP is a class that executes the business logic process the data and returns a dataset which is rendered/shown in the report
 -cannot directly use a query to access the data from the database
@@ -1078,10 +1086,91 @@ activity 7:
 -in the PurchPurchaseOrderDS dataset of the datasets node restore it so we can see the field we added earlier in the table since this dataset depends on this table for its query property
 
 Security basics
+-sign in via AAD -> AAD redirects to AX7/dynamics 365 -> AX7/dynamics 365 start page display
+-role based security comprises of duties, duties comprise of privileges (but security roles can also comprise of privileges), and privileges comprise of permissions which from your knowledge in django are the things that a user can do in a web application
+-extensible data security framework comprise of a query, security policy, context and contrained tables
+-users are assigned to one or more roles depending on their job that take into account the organization size, culture, and industry focus
+-in designing roles it comprises of types and segregation categories
+
+-create security duty
+-add SysDataAreamaintain privilege
+
+-buttons can have permissions like allow create, read, update, delete, partial update etc.
+-table and form fields fields can also ahve permisisons like allow edit allow edit on create, mandatory, and minimum read access
+-menu items also has permissions like read, correct, create, update, and delete permissions and has properties like permisison type, permission object child, linked permission object
+-read -> correct -> update -> create -> delete is the heirarchy
+
+
+
+
 
 DAY 7
-Data entity
 Power BI
+-consists of features like in-memory aggregate models, aggregate data entities, aggregate programming model, aggregate measurements and dimensions, and new KPI modelling
+-types are contextual embedded, and self-service
+-power BI can be a middle man between other I think MS appliciations. Could it be that this is like an API that allows dynamics 365 to integrate with other MS apps
+-reporting services can be hoested in ms azure compute service, has a simplified development, administration and enhanced report viewing
+
+Development process in power BI
+-create reporting project in VS
+-edit report in VS
+-add report or I assume hook it to a menu item
+-set menu item as start up object
+-deploy report to server
+-use ctrl + f5 to verify the report
+
+Service and Integrations
+-an X++ class can use yes SOAP, REST, and OData types of APIs. REST APIs in particular use HTTP/JSON data which I know.  OData is also a standard from Microsoft that relies on the REST Architecture to send specific types of messages over HTTP. The AtomPub protocol for instance is one of the best examples of REST API design. So, in a sense you are right - the OData is just another REST API and each OData implementation is a REST-ful web service. The difference is that OData is a specific protocol; REST is architecture style and design pattern.
+-an X++ class can also access the Azure SQL database
+-a data entity which depends on an X++ class, table, relational query, and an aggregate query can also access the Azure SQL database
+-for the OData type of API it provides a simple and uniform way to share data in a discoverable fashion through uniform URL conventions. It also enables broad integration across other microsoft products and supports consumption in PowerBI.com as a refreshable data source
+
+Workflows
+
+
+
+
+
+Data entity
+-is a de-normalized view of database tables
+-provides a single stack to capture business logic
+-provides primary mechanism to extract/insert datasets
+-replaces diverging concepts of DIXF entities
+-categories of data entities range from parameters, reference, master, document, and transaction
+-is used mainly in synchronous services, asynchronous integration, data migration, and business intelligence
+
+
+Activity 8:
+-go to data management in the work spaces
+-once in the page click data entities
+
+-go to the VendGroup table in accounts payable > vendors
+-in the page we will see a button open as (excel etc.)
+-if it shows that the table acn be opened in excel then it is already a data entity
+
+-in our DBFMVehicleTable add a primary index property which is set to our created index element DBFMVehicleIdx
+-synchronize the database
+-right lcick our created tabl > addins > data entity or create a new data entity called DBFMVehicleDataEntity
+-in the wizard our primary data source will be our created DBFMVehicleTable
+-set the DBFMVehicleID to mandatory in the wizard
+
+-go again to the data management in work spaces
+-click the framework parameter tiles
+-click refresh entity list which will show this message: The entity list is being refreshed. Job execution during this time must be stopped. After this operation is completed, entities already published to your database must be re-published if required to ensure schema consistency. Entities on which change tracking was enabled must also be evaluated with the new metadata changes and if needed, change tracking must be disabled and re-enabled to ensure change tracking is consistent with the updated schema of the entity.
+-if nothing is shown when clicking hte framework parameter tiles create a runnable class
+-once refresh is done click the the data entity tile in the data management page
+-search our created data entity which is DBFMVehicleTable
+
+file: RefreshEntityList.xpp
+class RefreshEntityList
+{
+	public static void main(Args _args)
+	{
+		DMFDataPopulation::createDefaultMappingAsync();
+	}
+}
+
+
 
 
 
