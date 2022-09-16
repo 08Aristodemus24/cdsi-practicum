@@ -1,5 +1,7 @@
 ﻿
-time mark (reports 1):
+time mark:
+reports 8PM1 - 3:05:13
+security basics, data entities 9AM1 - 2:32:58
 
 topics:
 learn what you need to know then study those that you vaguely know because of time restriction deply
@@ -25,6 +27,10 @@ screenshot your code and save it with doodles for side notes
 password for serving the project loaclly
 
 
+
+everytime a table, data entity, report, changes sync db
+everytime we need a package udpate our model parameters
+everytime a report changes clean build and then deploy if report does not work try to restart SSRS service in the services application
 
 
 DaY 4
@@ -1062,17 +1068,19 @@ activity 7:
 -how does the report somehow now what report to display based on the selected row
 
 
-2 ways on how to modify report layout of a built in report
+2 ways on how to modify report layout of a built in report (FOR REFACTORING)
 -report layout can be modified on controller class by overriding the standard controller class
--report that uses print management can be modified by extending PrintMgmtReportFormatPopulator class to add new report layout
--and also y extending PrintMgmtDocType class to identify which report layout will be used depends on document type
+-report that uses print management can be modified by extending PrintMgmtReportFormatPopulator class to add new report layout and also by extending PrintMgmtDocType class to identify which report layout will be used depends on document type
 
 -open in designer the built in VendPurchOrderJournal form
 -search for the PurchPurchaseOrderOriginal menu item button in the design pattern tab either by usign the main explorer or AOT search engine
 -open the menu item button in the designer or if used main explorer in searching right click the button and click go to menu item output PurchPurchaseOrderOriginal
+
 -since a output menu item uses a control class we use the information that will be provided in the menu items properties as basis for us to search the name of the class in the AOT
 -search the class name and view its code
--search for PurchPurchaseOrderDP and view its code
+
+-search for PurchPurchaseOrderDP class and view its code
+
 -search for the PurchPurchaseOrder report 
 -in its datasets node are the elements PurchPurchaseOrderLine and PurchPurchaseOrderDS, click the latter and see its query property
 -the query is PurchPurchaseOrderDP.PurchPurchaseOrderHeader which is the method that uses the shall we say [SrsReportDatasetAttribute(tableStr(DBFMVehicleReportTable))] decorator
@@ -1080,10 +1088,86 @@ activity 7:
 -so search PurchPurchaseOrderHeader and create an extension for it. (This is a table BTW)
 -create another string extended data type named DBFMDescription and add it in our extended table
 
--search PurchPurchaseOrder
+-search use the <name> of teh <class name>DP class and the <class name>
 -duplicate it in our project
 -rename it
 -in the PurchPurchaseOrderDS dataset of the datasets node restore it so we can see the field we added earlier in the table since this dataset depends on this table for its query property
+-once done make sure to deploy reports
+
+go to modules > accounts payable > purchase orders > all purchase orders > select a record > in the action pane tab select purchase > purchase order confirmations > in the preview/print select box select original preview or print management
+
+
+
+
+
+Activity 8 (Pending):
+-under modules > sales and marketing >  sales orders > all sales orders > in the action tab pane select pick and pack
+-look for a record that has its field status set to invoiced or delivered
+-once record is selected click packing slip journal which is a display menu item that directs to the CustPackingSlipJournal the form that we are looking for that contains the output menu item button that directs to the report
+-once in the page click preview/print > original preview
+
+-add the new field named DBFMReference
+-duplicate the standard report and layout
+-modify the PrintMgmtReportFormatPopulator to add new report document layout. The doc type is PrintMgmtDocumentType::SalesOrderPackingSlip
+-modify the PrintMgmtDocTypeHandlerExt to add new report document layout. The doc type is PrintMgmtDocumentType::SalesOrderPackingSlip
+-extend the SalesInvoiceDP class to add the value on newly added field
+-for the new field the field must be a string that concatenates the other fields of table the report is using which is packing slip number and the packing slip sales order e.g. strFmt("%1-%2", packing slip sales order, packing slip number)
+
+search salespackingsliporiginal output menu item
+identify what controller class it has: SalesPackingSlipController
+search for the data provider class: SalesPackingSlipDP
+search for the report: SalesPackingSlip
+where to add the extra field? in the header of the report
+what is the query of the dataset element that is used by the header of the report? SalesPackingSlipDP.SalesPackingSlipHeaderTmp
+
+since we are trying to get the data of a header of a SalesPackingSlipHeaderTmp
+
+file: SalesPackingSlipDBFMS_Extension.xpp
+[ExtensionOf(classStr(SalesPackingSlipDP)]
+final class SalesPackingSlipDPDBFMS_Extension
+{
+	// this si what populates the data of a temporary table of a report
+	// like what we did in the this.populateData() method of our own data provider class
+	// this returns a temporary table SalesPackingSlipHeaderTmp
+	protected SalesPackingSlipHeaderTmp initializeSalesPackingSlipHeader()
+	{
+		SalesPackingSlipHeaderTmp salesPackingSlipHeaderTmpLocal = next initializeSalesPackingSlipHeader();
+		
+		salesPackingSlipHeaderTmpLocal.DBFMSReference = strFmt("%1-%2", 
+			this.parmCustPackingSlipJour().SalesId, 
+			this.parmCustPackingSlipJour().PackingSlipId);
+		
+		return salesPackingSlipHeaderTmpLocal;
+	}
+}
+
+
+I think this is the main file which allows the user to choose between what print management report format to choose like what we did in the PurchPurchaseOrder report we had now two formats to choose from one was the 
+file: PrintMgmtReportFormatPopulatorDBFMS_Extension
+[ExtensionOf(classStr(PrintMgmtReportFormatPopulator))]
+final class PrintMgmtReportFormatPopulatorDBFMS_Extension
+{
+	#PrintMgmtSetup
+
+	protected void addDocuments()
+	{
+		this.addCustomReportDocuments();
+		next addDocuments();
+	}
+
+	private void addCustomReportDocuments()
+	{
+		this.addOther(PrintMgmtDocumentType::SalesOrderPackingSlip, 
+			ssrsReportStr(SalesPackingSlipDBFMS, ReportCustom), 
+			ssrsReportStr(SalesPackingSlipDBFMS, ReportCustom), #NoCountryRegionId);
+	}
+}
+
+
+
+
+
+
 
 Security basics
 -sign in via AAD -> AAD redirects to AX7/dynamics 365 -> AX7/dynamics 365 start page display
@@ -1140,7 +1224,7 @@ Data entity
 -is used mainly in synchronous services, asynchronous integration, data migration, and business intelligence
 
 
-Activity 8:
+Activity 9:
 -go to data management in the work spaces
 -once in the page click data entities
 
@@ -1174,13 +1258,20 @@ class RefreshEntityList
 
 
 
+
+Unfortunate errors that are occuring in the project:
+BLANK
+
+
 weaknesses:
 difficulty wrapping my head around sql select statements, since the variable used to represent a table is used also to take in the would be value of the selected rows of a table
 - why a variable is without instantiation to a table is because that variable anyway will hold a specific entity instance of the table by virtue of using the select statement
 - unlike select statements in sql select statements in x++ only return one instance of an entity
-fields in tables and forms - by default just set the tables properties to yoru master values and then if you are going to let the user edit something or create or delete then set these on the forms object instead. Instead of always having to change the master property values of a table
+-fields in tables and forms by default just set the tables properties to yoru master values and then if you are going to let the user edit something or create or delete then set these on the forms object instead. Instead of always having to change the master property values of a table
 overrriding methods and accessing the tables or forms within overriden methods of tables and forms
 architecture of the whole system
+-overriding existing reports
+
 
 
 
