@@ -1,4 +1,8 @@
 ﻿
+
+update resume to include x++ and dynamics 365 finance and operations development
+update linked in profile
+
 time mark:
 reports 8PM1 - 3:05:13
 security basics, data entities 9AM1 - 2:32:58
@@ -1101,10 +1105,25 @@ go to modules > accounts payable > purchase orders > all purchase orders > selec
 
 
 Activity 8 (Pending):
--under modules > sales and marketing >  sales orders > all sales orders > in the action tab pane select pick and pack
--look for a record that has its field status set to invoiced or delivered
--once record is selected click packing slip journal which is a display menu item that directs to the CustPackingSlipJournal the form that we are looking for that contains the output menu item button that directs to the report
--once in the page click preview/print > original preview
+We are tasked a problem: in the click path "modules > sales and marketing >  sales orders > all sales orders > action tab pane" select pick and pack. 
+We then look for a record that has its field status set to invoiced or delivered. 
+Once record is selected click packing slip journal (which is a display menu item that directs to the CustPackingSlipJournal the form that we are looking for that contains the output menu item button that directs to the report) once in the page follow again the click path preview/print > original preview, which will generate a report. This is the report that we need to customize
+So this problem asks of us two things in order to edit the report: what report we need to edit and what table specifically does the report use for its header, body, and footer components?
+
+We do not know the name of the table itself let alone the report, however we can do this by identifying what menu we are in based on the click path we had to follow to get to teh page which contains all the sales orders records
+Because ew are in the sales and marketing module we can use these as keywords to search in the AOT what its menu name is. Once we find it we can right click it and select open in designer
+Once in we can then use the main tab search filter to search what menu item specifically what output menu item directs to the form that contains the table that we need
+Because we know what display menu item in the UI leads to the list of all sales orders based on the click path that we followed to access these list of all sales orders we can use its keywords as basis to search for that specific display menu item
+Once we find a the display menu item that resembles "all sales orders" we can identify the value of its properties object and object type. And in here we can extract out the form that it leads to when clicked based on its object property
+We use the name of this form as input for the search filter in the AOT and once we find the form we open it again in the designer
+Because we have another form to go to that contains the button that leads to the report itself we have to search in this current form we have what display menu item does in fact lead to this form in this case its the "pick and pack" display menu item that we need to search and then identify what form it uses
+Once form is identified we search it again in the AOT
+
+
+
+
+to know what method we will override we need to go to the report and identify which controller class and data provider class depends and is depended on
+
 
 -add the new field named DBFMReference
 -duplicate the standard report and layout
