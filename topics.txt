@@ -1116,30 +1116,31 @@ Once in we can then use the main tab search filter to search what menu item spec
 Because we know what display menu item in the UI leads to the list of all sales orders based on the click path that we followed to access these list of all sales orders we can use its keywords as basis to search for that specific display menu item
 Once we find a the display menu item that resembles "all sales orders" we can identify the value of its properties object and object type. And in here we can extract out the form that it leads to when clicked based on its object property
 We use the name of this form as input for the search filter in the AOT and once we find the form we open it again in the designer
-Because we have another form to go to that contains the button that leads to the report itself we have to search in this current form we have what display menu item does in fact lead to this form in this case its the "pick and pack" display menu item that we need to search and then identify what form it uses
-Once form is identified we search it again in the AOT
+Because we have another form to go to that contains the dropdown list that directs to the report itself we have to search in this current form we have what display menu item does in fact lead to this form, in this case the click path to the display menu item is "pick and pack" > packing slip journal, that we use to search and then identify what form it uses
+Once form is identified we search it again in the AOT and open it in the designer
+We now search for the output menu item button in the form that directs to the report
+Identify the value of the menu item name property of this button
+Search the menu item name in the AOT, open it in the designer, identify the object and object type property values
+The object value in particular will be the name of the controller class, and since the name usually for the controller class of a report is <name>Controller or <name>Controller.xpp for the file name, we can use the name to search for the data provider class and the report which usually have the names <name>DP/.xpp and <name> respectively which are the main objects that we will be working on
+To know what method will be overriden in the data provider class we need to look for what query property values the report that uses for its dataset elements
+Simultaneously we can search for the <name> report and open it again in the designer
+Identify the query property values of the dataset elements (usually with the substring "DS" in its name) of the dataset node that the report uses to populate its data in the report design which is typically divided into the header, body, and footer datasets
+Once identified the value will contain the <data provider class>.<report table> that we will need since it is the method that grants us access to the values that the report design uses
+Because we now know what table to extend via the reutnr table type of method that is used by the query property of a dataset element in a report we create an extension of this table
+We then add our field or drag an extended data type that we have in our solution to the fields ndoe of the extended table
+We then save all our files, sync the database, clean the solution and then rebuild the solution
+Once done we go back to our reports datasets, right click and select "restore" so that we can see the changes of these datasets based on the change we made to our extended table which we know is relied on by a dataset element
+We will then see our newly added field and from there we can edit the designs of a report to add this newly added field to its layout perhaps through adding a textbox with its expression set to this new field as we usually do
 
 
 
+for instance we wanted to override to override the data of the header of a report, we will have to then look for the method that returns this kind of table, and we will have to know if it is a method that is tailored to return data for the header of the repor
 
-to know what method we will override we need to go to the report and identify which controller class and data provider class depends and is depended on
 
+how to know what table the report uses??? Throught the data provider class or the reports datasets
+also do when we do find out the dataset what if there are multiple datasets that rely on different tables?
+Do I create an extension only for this temporary table or the table that encompasses these temporary tables, that contain all the fields that are partly used by these temporary tables e.g. SalesPackingSlipHeaderTmp or SalesPackingSlip?
 
--add the new field named DBFMReference
--duplicate the standard report and layout
--modify the PrintMgmtReportFormatPopulator to add new report document layout. The doc type is PrintMgmtDocumentType::SalesOrderPackingSlip
--modify the PrintMgmtDocTypeHandlerExt to add new report document layout. The doc type is PrintMgmtDocumentType::SalesOrderPackingSlip
--extend the SalesInvoiceDP class to add the value on newly added field
--for the new field the field must be a string that concatenates the other fields of table the report is using which is packing slip number and the packing slip sales order e.g. strFmt("%1-%2", packing slip sales order, packing slip number)
-
-search salespackingsliporiginal output menu item
-identify what controller class it has: SalesPackingSlipController
-search for the data provider class: SalesPackingSlipDP
-search for the report: SalesPackingSlip
-where to add the extra field? in the header of the report
-what is the query of the dataset element that is used by the header of the report? SalesPackingSlipDP.SalesPackingSlipHeaderTmp
-
-since we are trying to get the data of a header of a SalesPackingSlipHeaderTmp
 
 file: SalesPackingSlipDBFMS_Extension.xpp
 [ExtensionOf(classStr(SalesPackingSlipDP)]
