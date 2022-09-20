@@ -27,10 +27,21 @@ screenshot your code and save it with doodles for side notes
 
 
 
-everytime a table, data entity, report, changes sync db
-everytime we need a package udpate our model parameters
-everytime a report changes clean build and then deploy if report does not work try to restart SSRS service in the services application
-everytime data entity is created and if data entity list refresh doe snot work try to restart Microsoft Dynamics 365 unified operations: data import export framework service
+default dashboard link:
+https://usnconeboxax1aos.cloud.onebox.dynamics.com/?cmp=rlc&mi=DefaultDashboard
+
+
+
+
+Protocols:
+1. everytime a table, data entity, report, changes sync db via dynamics 365 menu and via solution explorer
+2. everytime we need a package udpate our model parameters
+3. everytime a report changes clean, build, and then deploy. If report does not work try to restart SSRS service in the services application
+4. everytime data entity is created go to data management > framework parameters > entity settings > refresh entity list. If data entity list refresh does not work try to restart Microsoft Dynamics 365 unified operations: data import export framework service
+5. everytime an exported data entity is edited go to data management > data entities > select exported data entity > modify target mapping > generate target mapping 
+
+
+
 
 DaY 4
 Exception handling
@@ -1252,33 +1263,9 @@ Activity 9:
 -in the page we will see a button open as (excel etc.)
 -if it shows that the table acn be opened in excel then it is already a data entity
 
--in our DBFMVehicleTable add a primary index property which is set to our created index element DBFMVehicleIdx
--synchronize the database
--right lcick our created tabl > addins > data entity or create a new data entity called DBFMVehicleDataEntity
--in the wizard our primary data source will be our created DBFMVehicleTable
--set the DBFMVehicleID to mandatory in the wizard
+-search RetailVendVendorV3Staging
+-add Dimensions and Ledger package to our model in order to use the RetailVendVendorV3Staging and RetailVendVendorV3Entity objects
 
--go again to the data management in work spaces
--click the "framework parameter" tile
--click refresh entity list which will show this message: The entity list is being refreshed. Job execution during this time must be stopped. After this operation is completed, entities already published to your database must be re-published if required to ensure schema consistency. Entities on which change tracking was enabled must also be evaluated with the new metadata changes and if needed, change tracking must be disabled and re-enabled to ensure change tracking is consistent with the updated schema of the entity.
--if nothing is shown when clicking hte framework parameter tiles create a runnable class
-file: RefreshEntityList.xpp
-class RefreshEntityList
-{
-	public static void main(Args _args)
-	{
-		DMFDataPopulation::createDefaultMappingAsync();
-	}
-}
--once refresh is done click the the data entity tile in the data management page
--search our created data entity which is DBFMVehicleTable to confirm if it is indeed there
--go back to the data management page again and clcik the "export" tile (but I think to do this we have to have our DBFMVehicleTable be selected)
--add a group name in this case "DBFMVehicleTableExport", then add entity and look up the DBFMVehicleDataEntity
--the target data format will be in EXCEL then click add
--assumign the DBFMVehicleTable is selected for export in the <Group name> page follow the click path Add entity > <vehicle table e.g. DBFMVehicleDataEntity> > add
--once added in our list we select this entity to be export and click "export" on the action pane tab
--exporting will then takes us to the page wherein the list of batch jobs are being processed; the exportation being of our table.
--when we click the record that is our data entity it will take us to the page where we see the details of this batch job or its execution summary
 
 -for the next step follow the directory path C:/program files (x86)/microsoft sdks/azure/storage emulator
 -open the AzureStorageEmulator.exe.config file
