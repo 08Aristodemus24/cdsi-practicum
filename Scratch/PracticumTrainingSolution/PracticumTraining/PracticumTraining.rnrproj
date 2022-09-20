@@ -14,8 +14,8 @@
     <ProjectGuid>{85fbf53b-a686-4a47-a470-8b688417f2f9}</ProjectGuid>
     <Name>PracticumTraining</Name>
     <RootNamespace>PracticumTraining</RootNamespace>
-    <StartupObject>DBFMVehicleListForm</StartupObject>
-    <StartupType>Form</StartupType>
+    <StartupObject>DevBasics_</StartupObject>
+    <StartupType>Class</StartupType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Configuration>Debug</Configuration>
@@ -83,6 +83,11 @@
       <Name>DBFMFMRentalFormHandler</Name>
       <Link>Classes\DBFMFMRentalFormHandler</Link>
     </Content>
+    <Content Include="AxClass\DBFMPrintMgmtReportFormatPopulator_Extension">
+      <SubType>Content</SubType>
+      <Name>DBFMPrintMgmtReportFormatPopulator_Extension</Name>
+      <Link>Classes\DBFMPrintMgmtReportFormatPopulator_Extension</Link>
+    </Content>
     <Content Include="AxClass\DBFMVehicleContract">
       <SubType>Content</SubType>
       <Name>DBFMVehicleContract</Name>
@@ -148,10 +153,45 @@
       <Name>Loops_</Name>
       <Link>Classes\Loops_</Link>
     </Content>
+    <Content Include="AxClass\PrintMgmtDocTypeHandlerExt">
+      <SubType>Content</SubType>
+      <Name>PrintMgmtDocTypeHandlerExt</Name>
+      <Link>Classes\PrintMgmtDocTypeHandlerExt</Link>
+    </Content>
+    <Content Include="AxClass\PurchPurchaseOrderDPDBFMS_Extension">
+      <SubType>Content</SubType>
+      <Name>PurchPurchaseOrderDPDBFMS_Extension</Name>
+      <Link>Classes\PurchPurchaseOrderDPDBFMS_Extension</Link>
+    </Content>
+    <Content Include="AxClass\RefreshEntityList">
+      <SubType>Content</SubType>
+      <Name>RefreshEntityList</Name>
+      <Link>Classes\RefreshEntityList</Link>
+    </Content>
+    <Content Include="AxClass\SalesPackingSlipDPDBFMS_Extension">
+      <SubType>Content</SubType>
+      <Name>SalesPackingSlipDPDBFMS_Extension</Name>
+      <Link>Classes\SalesPackingSlipDPDBFMS_Extension</Link>
+    </Content>
     <Content Include="AxClass\VendTableDBFM_Extension">
       <SubType>Content</SubType>
       <Name>VendTableDBFM_Extension</Name>
       <Link>Classes\VendTableDBFM_Extension</Link>
+    </Content>
+    <Content Include="AxDataEntityView\DBFMVehicleDataEntity">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataEntity</Name>
+      <Link>Data Entities\DBFMVehicleDataEntity</Link>
+    </Content>
+    <Content Include="AxDataEntityView\DBFMVehicleDataEntity2">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataEntity2</Name>
+      <Link>Data Entities\DBFMVehicleDataEntity2</Link>
+    </Content>
+    <Content Include="AxDataEntityView\DBFMVehicleMaintenanceDataEntity">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceDataEntity</Name>
+      <Link>Data Entities\DBFMVehicleMaintenanceDataEntity</Link>
     </Content>
     <Content Include="AxEdt\DBFMDescription">
       <SubType>Content</SubType>
@@ -383,6 +423,46 @@
       <Name>PurchPurchaseOrderDBFMS</Name>
       <Link>Report Copies\PurchPurchaseOrderDBFMS</Link>
     </Content>
+    <Content Include="AxReport\SalesPackingSlipDBFMS">
+      <SubType>Content</SubType>
+      <Name>SalesPackingSlipDBFMS</Name>
+      <Link>Report Copies\SalesPackingSlipDBFMS</Link>
+    </Content>
+    <Content Include="AxSecurityPrivilege\DBFMVehicleDataEntity2Maintain">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataEntity2Maintain</Name>
+      <Link>Data Entities\DBFMVehicleDataEntity2Maintain</Link>
+    </Content>
+    <Content Include="AxSecurityPrivilege\DBFMVehicleDataEntity2View">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataEntity2View</Name>
+      <Link>Data Entities\DBFMVehicleDataEntity2View</Link>
+    </Content>
+    <Content Include="AxSecurityPrivilege\DBFMVehicleDataEntityMaintain">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataEntityMaintain</Name>
+      <Link>Data Entities\DBFMVehicleDataEntityMaintain</Link>
+    </Content>
+    <Content Include="AxSecurityPrivilege\DBFMVehicleDataEntityView">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataEntityView</Name>
+      <Link>Data Entities\DBFMVehicleDataEntityView</Link>
+    </Content>
+    <Content Include="AxSecurityPrivilege\DBFMVehicleMaintenanceDataEntityMaintain">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceDataEntityMaintain</Name>
+      <Link>Data Entities\DBFMVehicleMaintenanceDataEntityMaintain</Link>
+    </Content>
+    <Content Include="AxSecurityPrivilege\DBFMVehicleMaintenanceDataEntityView">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceDataEntityView</Name>
+      <Link>Data Entities\DBFMVehicleMaintenanceDataEntityView</Link>
+    </Content>
+    <Content Include="AxSecurityRole\DBFMDataEntryClerkRole">
+      <SubType>Content</SubType>
+      <Name>DBFMDataEntryClerkRole</Name>
+      <Link>Security Roles\DBFMDataEntryClerkRole</Link>
+    </Content>
     <Content Include="AxTableExtension\CustTable.DevelopmentBasicsFMS">
       <SubType>Content</SubType>
       <Name>CustTable.DevelopmentBasicsFMS</Name>
@@ -398,10 +478,30 @@
       <Name>PurchPurchaseOrderHeader.DevelopmentBasicsFMS</Name>
       <Link>Table Extensions\PurchPurchaseOrderHeader.DevelopmentBasicsFMS</Link>
     </Content>
+    <Content Include="AxTableExtension\SalesPackingSlipHeaderTmp.DevelopmentBasicsFMS">
+      <SubType>Content</SubType>
+      <Name>SalesPackingSlipHeaderTmp.DevelopmentBasicsFMS</Name>
+      <Link>Table Extensions\SalesPackingSlipHeaderTmp.DevelopmentBasicsFMS</Link>
+    </Content>
     <Content Include="AxTableExtension\VendTable.DevelopmentBasicsFMS">
       <SubType>Content</SubType>
       <Name>VendTable.DevelopmentBasicsFMS</Name>
       <Link>Table Extensions\VendTable.DevelopmentBasicsFMS</Link>
+    </Content>
+    <Content Include="AxTable\DBFMVehicleDataStaging">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataStaging</Name>
+      <Link>Data Entities\DBFMVehicleDataStaging</Link>
+    </Content>
+    <Content Include="AxTable\DBFMVehicleDataStaging1">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleDataStaging1</Name>
+      <Link>Data Entities\DBFMVehicleDataStaging1</Link>
+    </Content>
+    <Content Include="AxTable\DBFMVehicleMaintenanceDataStaging">
+      <SubType>Content</SubType>
+      <Name>DBFMVehicleMaintenanceDataStaging</Name>
+      <Link>Data Entities\DBFMVehicleMaintenanceDataStaging</Link>
     </Content>
     <Content Include="AxTable\DBFMVehicleMaintenanceReportTable">
       <SubType>Content</SubType>
@@ -443,6 +543,8 @@
     <Folder Include="Menu Items" />
     <Folder Include="Form Extensions" />
     <Folder Include="Menu Extensions" />
+    <Folder Include="Data Entities" />
+    <Folder Include="Security Roles" />
     <Folder Include="Report Copies" />
     <Folder Include="Reports" />
     <Folder Include="Table Extensions" />
