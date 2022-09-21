@@ -1,8 +1,6 @@
 ﻿
 
 time mark:
-data entities
-powerBI - 40:23
 
 topics:
 learn what you need to know then study those that you vaguely know because of time restriction deply
@@ -33,889 +31,13 @@ https://usnconeboxax1aos.cloud.onebox.dynamics.com/?cmp=rlc&mi=DefaultDashboard
 
 
 
+
 Protocols:
 1. everytime a table, data entity, report, changes sync db via dynamics 365 menu and via solution explorer
 2. everytime we need a package udpate our model parameters
 3. everytime a report changes clean, build, and then deploy. If report does not work try to restart SSRS service in the services application
 4. everytime data entity is created go to data management > framework parameters > entity settings > refresh entity list. If data entity list refresh does not work try to restart Microsoft Dynamics 365 unified operations: data import export framework service
 5. everytime an exported data entity is edited go to data management > data entities > select exported data entity > modify target mapping > generate target mapping 
-
-
-
-
-DaY 4
-Exception handling
-
-file: DBFMVehicleEntry.xpp
-DBFMVehicleTableTest vehicle_table;
-
-public void run()
-{
-	this.setupDialog();
-	Dialog.run();
-	Dialog.wait();
-	if(Dialog.closeOk())
-	{
-		this.getFieldValues();
-		if(vehicle_table.validateWrite())
-		{
-			vehicle_table.insert();
-			DBFMVehicleEntry::tableInsertSuccess();
-		}
-	}
-}
-
-public void getFieldValues()
-{
-	str make, model, VIN;
-	int vehicle_id;
-	DBFMFuelLevel fuel_level;
-
-	make = df_make.value();
-	model = df_model.value();
-	VIN = df_vin.value();
-	fuel_level = df_fuel_level.value();
-
-	try
-	{
-		if(strlen(VIN) < 18)
-		{
-			throw error("Invalid VIN. Cannot be fewer than 18 characters. Appending characters");
-		}
-		else
-		{
-		
-		}
-	}
-
-	catch{
-		// see how many 0s are needed for the VIN to be valid
-		// e.g. VIN is 7 in length missing 11 0s
-		for(int i = 0; i < 18 - strlen(VIN); ++i)
-		{
-			VIN += "0";
-		}
-		retry;
-	}
-
-	vehicle_table.DBFMMakeTest = make;
-	vehicle_table.DBFMModelTest = model;
-	vehicle_table.DBFMVINTest = VIN;
-	vehicle_table.DBFMFuelLevelTest = fuel_level;
-}
-
-
-// if VIN is less than 18 characters throw an error but retry the try block and append now the missing characters through 0s for the VIN field
-
-public void setupDialog()
-{
-
-	// to add 
-	df_fuel_level = Dialog.addField(extendedTypeStr(DBFMFuelLevelTest), "Fuel level");
-}
-
-
-
-
-
-
-DBFMVehicleTable.xpp
-
-public class DBFMVehicleTable extends common
-{
-	public void initValue()
-	{
-		super();
-	}
-
-	public void insert()
-	{
-		super();
-	}
-
-	// method runs when modifying a field, takes in a field that was modified
-	public void modifiedField(Field _fieldId)
-	{
-		super(_fieldId);
-
-		switch(_fieldId)
-		{
-			// fieldNum(<table name>, <table field>)
-			case fieldNum(DBFMVehicleTableTest, DBFMServiceTypeCodeTest):
-				info("service type field is updated");
-				break;
-			case fieldNum(DBFMVehicleTableTest, DBFMSeatingCapacityTest):
-				info("seating capacity field is updated");
-				break;
-			case fieldNum(DBFMVehicleTableTest, DBFMModel):
-				info("model field is updated");
-				break;
-		}
-	}
-
-	public boolean validateWrite()
-	{
-		boolean is_valid = super();
-		if(this.DBFMFuelLevel < 10)
-		{
-			is_valid = false;
-			error("fuel level must be greater than or equal 10");
-		}
-	
-		return is_valid;
-	}
-}
-
-
-
-
-
-
-
-file: CustCreateCustomer.xpp
-public void run()
-{
-CustTable cust_table;
-Currency curr_table;
-
-Dialog dialog = new Dialog("Create new customer");
-DailogField df_cust_acc = Dialog.addField(extendedTypeStr(CustVendAc), "Account number");
-DialogField df_group = Dialog.addField(extendedTypeStr(CustGroupId), "Group");
-DialogField df_credit_rating = Dialog.addField(extendedTypeStr(CustCreditRating), "Credit rating");
-
-const int MAX_RETRIES = 5;
-int retry_count = 0;
-
-
-if(dialog.run()){
-try
-{
-	cust_table.AccountNum = df_cust_acc.value();
-	cust_table.CustGroup = df_group.value();
-	cust_table.CreditRating = df_credit_rating.value();
-	if(!cust_table.validateWrite())
-	{
-		// this will throw an error since the currency field is not supplied a value;
-		throw error("Please enter all required fields");
-	}
-	else
-	{
-		cust_table.insert();
-	}
-}
-catch(Exception::Error)
-{
-	// check if Currency field is indeed blank
-	if(!cust_table.Currency)
-	{
-		select firstonly curr_table;
-		cust_table.Currency = curr_table.CurrencyCode;
-		if(retry_count <= MAX_RETRIES)
-		{
-			++retry_count;
-			retry;
-		}
-	}
-	else
-	{
-		error("An error occured. please try again");
-	}
-}
-}
-}
-
-
-
-DBFMBaseClass.xpp
-class DBFMBaseClass
-{
-	public int curr_state;
-	
-	public int permState(int _value=curr_state)
-	{
-		curr_state = _value;
-		return curr_state;
-	}
-
-	public void displayState()
-	{
-		info(strFmt("DBFMBaseClass state: %1", this.permState()));
-	}
-}
-
-
-
-DBFMBaseClass_Extension.xpp
-[ExtensionOf(classStr(DBFMBaseClass))]
-final class DBFMBaseClass_Extension
-{
-	public void setCustomState(int cust_state)
-	{
-		this.permState(cust_state);
-	}
-	
-	public void displayState()
-	{
-		warning("from extension class");
-		next displayState();
-		warning("from extension class");
-	}
-}
-
-
-
-DBFMChildClass.xpp
-class DBFMChildClass extends DBFMBaseClass
-{
-	public void displayState()
-	{
-		info("child class before super()");
-		super();
-		info("child class after super");
-	}
-}
-
-
-
-DBFMChildClass_Extension.xpp
-[ExtensionOf(classStr(DBFMChildClass))]
-final class DBFMChildClass_Extension
-{
-	public void displayState()
-	{
-		info("Child class extension before next");
-		next displayState();
-		info("Child class extension after next");
-	}
-}
-
-
-
-DBFMExtendedClasses.xpp
-class DBFMExtendedClasses
-{
-	public static void main(Args _args)
-	{
-		// we still call the normal name of a now extended class
-		DBFMBaseClass bc = new DBFMBaseClass();
-		bc.displayState();
-		bc.setCustomeState(10000);
-		bc.displayState();
-
-		DBFMChildClass cc = new DBFMChildClass();
-		cc.displayState();
-		cc.setCustomeState(50000);
-		cc.displayState();
-	}
-
-	
-}
-
-
-
-CustTableDBFM_Extension.xpp
-[ExtensionOf(tableStr(CustTable))]
-final class CustTableDBFM_Extension
-{
-	// does this override the this.insert() method of the CustTable table
-	void insert(DirPartyType _partyType, Name _name, boolean _updateCRM)
-	{
-		next insert(_partyType, _name, _updateCRM);
-	}
-
-}
-
-
-
-
-next keyword is akin to super() method to call the original method of the parent class
-next cannot also be written inside conditional statements scopes
-The next keyword behaves like a super, and it will define when your extended logic executes
-The next call after your code behaves like a Pre-event handler. Your logic executes first, and later on, the logic residing in the original method gets executed
-
-
-Activity 1:
--COC enabled strongly typed extension capabilities of public and protected methods
--it allows technical consultants to extend the application avoiding over-layering
--to use COC you must declare your class as final and your methods should always contain the next keyword
--only public and protected methods are allowed to be extended
--you can add custom logic that will run before and/or after the standar dcode runs
--lyou can access the protected and public methods, and variables of the base class
--you can only extend objects that are part of the referenced packages of your model. This is done through clicking the model parameters under the dynamics 365 menu, and updating the model parameters, the once in the window select the DevelopmentBasicsFMS option, next check the model we are trying to reference always e.g. CustTable for instance. This works like an import statement which adds the model that we check to our current project directory which we can always access at will
--methods with [Hookable(false)] or [Wrappable(false)] attribute cannot be extended
--methods that use the final keyword cannot be wrapped in an extension class
--class name must have an _Extension suffix
--class declaration needs to ouse the final keyword
--add the ExtensionOf attribute on the class
--use COC to extend the following: table, class, form, etc.
--the next keyword is required. This will determine on which part of the code the base class will be called
-
-
-COCBaseClass.xpp
-class COCBaseClass
-{
-	public void new()
-	{
-		//
-	}
-
-	protected void test()
-	{
-		info("base class call");
-	}
-
-	public void runTest()
-	{
-		this.test();
-	}
-}
-
-
-COCChildClass.xpp
-class COCChildClass extends COCBaseClass
-{
-	// override test() method of parent class
-	protected void test()
-	{
-		info("child class before super");
-		//  super() calls the original overriden method of the parent class
-		// where ever super() is scoped or the method it is currently in (usually an overriden method)
-		// super() assimilates the parent method of that of the overriden method it is inside of
-		// and returns (or not) its respective value, in this case the test() method is overriden 
-		// and is the method it is inside in, therefore call the parent test() method
-		super();
-		info("child class after super");
-	}
-}
-
-COCChildClass_Extension.xpp
-[ExtensionOf(classStr(COCChildClass))]
-final class COCCHildClass_Extension
-{
-	protected void test()
-	{
-		info("extension 1 before next call")
-		next test();
-		info("extension 1 after next call")
-	}
-}
-
-
-
-[ExtensionOf(tableStr(CustTable))]
-final class CustTableDBFM_Extension
-{
-	void insert(DirPartyType _partyType, Name _name, boolean _updateCRM)
-	{
-		if(str2Int(this.creditRating) < 200)
-		{
-			this.Blocked = CustVendorBlocked::All;
-			info("The customer has been placed on hold du to low credit rating. Please review");
-		}
-		next insert(_partyType, _name, _updateCRM);
-	}
-}
-
-
-
-
-we can also use other built or even pre-built objects like tables and forms in creating extensions of them
-e.g. [ExtensionOf(formStr(CustForm))] or [ExtensionOf(tableStr(CustTable))]
-
-
-we can override methods of the tables we created and pre-built tables by right clicking the methods node of a table and navigating to the override method and selecting the method that we will override
-this will then add our overriden method in this node and we can edit this method through x++ code 
-
-
-DBFMVehicleTable.xpp
-
-public class DBFMVehicleTable extends common
-{
-	public void initValue()
-	{
-		super();
-	}
-
-	public void insert()
-	{
-		super();
-	}
-
-	// method runs when modifying a field, takes in a field that was modified
-	public void modifiedField(Field _fieldId)
-	{
-		super(_fieldId);
-
-		switch(_fieldId)
-		{
-			// fieldNum(<table name>, <table field>)
-			case fieldNum(DBFMVehicleTableTest, DBFMServiceTypeCodeTest):
-				info("service type field is updated");
-				break;
-			case fieldNum(DBFMVehicleTableTest, DBFMSeatingCapacityTest):
-				info("seating capacity field is updated");
-				break;
-			case fieldNum(DBFMVehicleTableTest, DBFMModel):
-				info("model field is updated");
-				break;
-		}
-	}
-
-	public boolean validateWrite()
-	{
-		boolean is_valid = super();
-		if(this.DBFMFuelLevel < 10)
-		{
-			is_valid = false;
-			error("fuel level must be greater than or equal 10");
-		}
-	
-		return is_valid;
-	}
-}
-
-
-Day 5
-Code extension - but what to use extensions or by clicking the override option in the tables that we have, I guess overriding the functionality of a table 
-
-Activity 2:
-- set initial value of Year to current date (I guess we can override here the this.initValue() method of a table, use today())
-- add validation "year must not be greater than current date"
-- add year on dialog (simple Dialog.addField(extendedTypeStr(DBFMYearTest), "year");)
-- set initial value of vehicle id to the number next to the greatest value of saved vehicle ids (will probably use the select statement and pickign the max of all vehicle ids, then using this max value for the overriden initValue())
-- disable editing of vehicle id on the table (this method already exists as a built in method)
-
-DBFMVehicleEntry.xpp
-class DBFMVehicleEntry
-{
-	DBFMVehicleTableTest vehicle_table;
-	Dialog dialog;
-	DialogField df_make, df_model, df_VIN, df_vehicle_id, df_fuel_level, df_year;
-
-	public static void main(Args _args)
-	{
-		DBFMVehicleEntry ve = new DBFMVehicleEntry();
-		ve.run();		
-	}
-
-
-	public void run()
-	{
-		this.setupDialog();
-		Dialog.run();
-		Dialog.wait();
-		if(Dialog.closeOk())
-		{
-			this.getFieldValues();
-			if(vehicle_table.validateWrite())
-			{
-				vehicle_table.insert();
-				DBFMVehicleEntry::tableInsertSuccess();
-			}
-		}
-	}
-
-	public void getFieldValues()
-	{
-		str make, model, VIN;
-		int vehicle_id;
-		DBFMFuelLevel fuel_level;
-
-		make = df_make.value();
-		model = df_model.value();
-		VIN = df_vin.value();
-		fuel_level = df_fuel_level.value();
-
-		try
-		{
-			if(strlen(VIN) < 18)
-			{
-				throw error("Invalid VIN. Cannot be fewer than 18 characters. Appending characters");
-			}
-			else
-			{
-		
-			}
-		}
-
-		catch{
-			// see how many 0s are needed for the VIN to be valid
-			// e.g. VIN is 7 in length missing 11 0s
-			for(int i = 0; i < 18 - strlen(VIN); ++i)
-			{
-				VIN += "0";
-			}
-			retry;
-		}
-
-		vehicle_table.DBFMMakeTest = make;
-		vehicle_table.DBFMModelTest = model;
-		vehicle_table.DBFMVINTest = VIN;
-		vehicle_table.DBFMFuelLevelTest = fuel_level;
-	}
-
-	public setupDialog()
-	{
-		vehicle_table.init_value();
-
-		df_make = Dialog.add(extendedTypeStr(DBFMMakeTest), "make");
-		df_model = Dialog.add(extendedTypeStr(DBFMModelTest), "model");
-		df_VIN = Dialog.add(extendedTypeStr(DBFMVINTest), "vehicle identification number (VIN)");
-		df_fuel_level = Dialog.add(extendedTypeStr(DBFMFuelLevelTest), "fuel level");
-		df_year = Dialog.add(extendedTypeStr(DBFMYearTest), "year");
-		df_vehicle_id = Dialog.add(extendedTypeStr(DBFMModelTest), "model");
-
-		df_vehicle_id.value(vehicle_table.DBFMVehicleIdTest);
-		df_vehicle_id.allowEdit(false);
-		df_year.value(vehicle_table.DBFMYear);
-	}
-}
-
-
-
-DBFMVehicleTable.xpp
-public class DBFMVehicleTable extends common
-{
-	public void initValue()
-	{
-
-		this.DBFMYearTest = today();
-		this.DBFMVehicleIdTest = this.getMaxVehicleId() + 1;
-		super();
-	}
-
-	public void insert()
-	{
-		super();
-	}
-
-	// method runs when modifying a field, takes in a field that was modified
-	public void modifiedField(Field _fieldId)
-	{
-		super(_fieldId);
-
-		switch(_fieldId)
-		{
-			// fieldNum(<table name>, <table field>)
-			case fieldNum(DBFMVehicleTableTest, DBFMServiceTypeCodeTest):
-				info("service type field is updated");
-				break;
-			case fieldNum(DBFMVehicleTableTest, DBFMSeatingCapacityTest):
-				info("seating capacity field is updated");
-				break;
-			case fieldNum(DBFMVehicleTableTest, DBFMModel):
-				info("model field is updated");
-				break;
-		}
-	}
-
-	public boolean validateWrite()
-	{
-		boolean is_valid = super();
-		if(this.DBFMFuelLevel < 10)
-		{
-			is_valid = false;
-			error("fuel level must be greater than or equal 10");
-		}
-
-		if(this.DBFMYearTest > today())
-		{
-			is_valid = false;
-			error("year must not be greater than current date")
-		}
-	
-		return is_valid;
-	}
-
-	private DBFMVehicleIdTest getMaxVehicleId()
-	{
-		return (select maxof(DBFMVehicleIdTest) from vehicle_table).DBFMVehicleIdTest;
-	}
-}
-
-
-
--create new DBFMVehicleTableGenFormTest
--data source: DBFMVehicleTableTest
--pattern: simple list
--add vehicle id, VIN, vehicle type code, year, make, model, gross vehicle weight, 
-fuel level, inspect  date, service type code
--create DBFMVehicleGenMenuItem
--add to OrganizationAdministration > Resources > Menus
--becuse validation of VIN is written in our this.getFieldValues() method we must now include it in the this.validateWrite() method
-
-
-Activity 3:
--using chain of command, set th einitial value of the field VengGroup in the VendTable to the first VendGroup from VendGroup table
--therefore import or include this in our model parameters this VendTable
--build and open accounts payable > vendors > all vendors
--click on new under th action pane and see if the group is set to the initial value
-
-
-DBFMVendTable_Extension.xpp
-[ExtensionOf(tableStr(VendTable))]
-final class DBFMVendTable_Extension
-{
-	public void initValue()
-	{
-		VendGroup vendGroup;
-
-		// ah ok because fields tables have internally no values
-		// then the initValue() method is called to initialize the fields to these values
-		// if there is no setting of any field then we can place next initValue() 
-		// either at the top or at the bottom
-		this.VendGroup = (select firstonly VendGroup from vendGroup).VendGroup;
-		next initValue();
-
-		// remember we can now dictate the behavior of the Vendtable because we have already extended it,
-		// so this is the class it now uses overall and the initValue() of the base class is not anymore
-		// the initValue() method being called but rather this declaration in our extension
-	}
-}
-
-Delegates allow us to access elements in higher models from a lower model. Below is a model heirarchy
-Test 
-Application suite
-Application foundation
-Application platform
-
-exhibit a: application foundation needs something from suite, suite needs to subscribe to application foundation
-
-(1)delegate (2)void  applyDiscountDelegate(real _receiptTotal, EventHandlerResult _result)
-{
-(3)
-}
-
-this is for application suite:
-[SubscribesTo(classStr(Simpletax), delegateStr(SimpleTax, applyDiscountDelegate))]
-public static void applyDiscountDelegateHandler(real _receiptTotal, EventHandlerResult _result)
-{
-	real discountedTotal = _receiptTotal * (1 - DiscountRate);
-	_result.result(discountedTotal);
-}
-
-for application foundation to use application suite:
-public real calculateTotalTax()
-{
-	real totalTax;
-	
-	EventhandlerResult result;
-	this.applyDiscountDelegate(this.ReceiptTotal, result);
-	this.ReceiptTotal = result.result();
-
-	totalTax = this.ReceiptTotal * this.TaxRate;
-
-	return totalTax;
-}
-
-
-
-
-
-Event handling
-
--is exactly like the performCreate(), onDelete(), onInsert(), componentDidMount(), componentWillMount(), events and methods that act as events in the languages you've learned like JavaScript, and Python
--we can override an event handler by creating a class
--copy the onInserting event in the CustTable table that we have included in our project via importing
--create a regular class named DBFMCustTableHandler and paste the onInserting event that we copied in the class
-
-file: DBFMCustTableHandler.xpp
-class DBFMCustTableHandler
-{
-	[DataEventHandler(tableStr(CustTable), DataEventType::Inserting)]
-	public static void CustTable_onInserting(Common sender, DataEventArgs e)
-	{
-		CustTable cust_table = sender;
-		if(str2int(cust_table.CreditRating) < 200)
-		{
-			cust_table.Blocked = CustVendorBlocked::All;
-			info("the customer has been placed on hold due to low credit rating. Please review);
-		}
-	}
-}	
-
-
-
--import FMRental forms by checking the FleetManagement package/model
--copy event handler onInitialized
--create another class and paste the onInitialized method
--other events are also nested in the data sources node, besides the root form node itself like OnModified, OnActivated
-
-file: DBFMFMRentalHandler.xpp
-class DBFMFMRentalHandler
-{
-	// under: FMRental
-	[FormEventHandler(formStr(FMRental), FormEventType::Initialized]
-	public static void FMRental_OnInitialized(xFormRun sender, FormEventArgs e)
-	{
-		info("initialized form event handler");
-
-		FormRun form_run = sender;
-		
-		// access this like a tree with its nodes and subnodes
-		// to gain access to the field of the form "value" itself
-		FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental_StateCopy1));
-		
-		if(fmrental_state_copy_1.valueStr() == "Complete")
-		{	
-			fmrental_state_copy_1.enabled(false);
-		}
-
-		info(strFmt("state is initialized as: %1", fmrental_state_copy_1.valueStr()));
-		
-	}
-
-	// under: FMRental_StateCopy1 < InfoGroup < LineViewHeader < LineViewTab < LineView < TabDetails < TabPageDetails < Tab < FMRental Design Pattern
-	[FormControlEventHandler(formControlStr(FMRental, FMRental_StateCopy1), FormControlEventType::Modified]
-	public static void FMRental_StateCopy1_OnModified(FormControl sender, FormControlEventArgs e)
-	{
-		//FMRental_StateCopy1 fmr_sc = sender;	
-		// when valueStr() has value "complete" set the form to disabled
-		if(sender.valueStr() == "Complete")
-		{
-			sender.enabled(false);
-		}
-		info("state %1 has been modified", sender.valueStr());
-	}
-
-	// under: events < FMRental < Data Sources < FMRental
-	[FormDataSourceEventHandler(formDataSourceStr(FMRental, FMRental), FormDataSourceEventType::Activated)]
-	public static void FMRental_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
-	{
-		FormRun form_run = sender.formRun();
-				
-		// access this like a tree with its nodes and subnodes
-		// to gain access to the field of the form "value" itself
-		FormControl fmrental_state_copy_1 = form_run.design().controlName(formControlStr(FMRental_StateCopy1));
-		
-		/* if(fmrental_state_copy_1.valueStr() == "Complete")
-		{	
-			fmrental_state_copy_1.enabled(false);
-		}
-		else
-		{
-			fmrental_state_copy_1.enabled(true);
-		} */
-		
-		/* // shorthand of the above
-		fmrental_state_copy_1.enabled(fmrental_state_copy_1.valueStr() == "Complete" ? false : true);		
-		info(strFmt("state is initialized as: %1", fmrental_state_copy_1.valueStr())); */
-
-		FMRental fm_rental = sender.cursor();
-		FormDataObject fm_rental_state = sender.object(fieldNum(FMRental, State));
-
-		fm_rental_state.enabled(fm_rental.State != FMReservatioState::Complete);
-		info(strFmt("state is initialized as: %1", fm_rental.State));		
-
-		
-	}
-	
-	// under: events < state < fields < FMRental < data sources < FMRental
-	[FormDataFieldEventHandler(formDataFieldStr(FMRental, FMRental, state), FormDataFieldEventType::Modified)]
-	public static void State_OnModified(FormDataObject sender, FormDataFieldEventArgs e)
-	{
-
-		// because the field is an enum we must compare the field_val
-		// to an enum value
-		anytype field_val = sender.getValue();
-		
-		/* if(sender.getValue() == FMReservationState::Complete)
-		{
-			sender.enabled(false);
-		}
-		else
-		{
-			sender.enabled(true);
-		} */
-
-		sender.enabled(sender.getValue() != FMReservationState::Complete);
-		info(strFmt("state has been modified to: %1", sender.getValue()));
-	}
-
-	
-}
-
--sabi na nga eh...to do this we need to go to a specific entity instance and disable the field there. Kasi wala tayo namention na specific instance so nastuck tayo sa form design lang mismo
--we need to access a specific instance, and what instance is it, yes the instances only with fields set to Complete
-[<node all words with capitalized first letters>EventHandler(<node all words with capitalized first letters except first word with first lowercase first letter>Str(<...args>), <node all words with capitalized first letters>EventType::<EventType>)]
-public static void <naem of the event handler or event to be overriden>(<...args>)
-{
-
-}
-
-
-
-
-Activity 4:
--using event handlers disable field "Group" on all vendors form if "Group" has a value, this means that even in cases of inserting a record, updating a record, upon the loading of a record the records must be checked to see if the their group fields are blank
--disable field "UPS zone" on all vendors > invoice and delivery > Delivery if "UPS zone" has a vlaue
-
-file: DBFMVendHandler.xpp
-class DBFMVendHandler.xpp
-{
-	[FormDataSourceEventHandler(formDataSourceStr(VendTable, VendTable), FormDataSourceEventType::Activated)]
-	public static void VendTable_OnActivated(FormDataSource sender, FormDataSourceEventArgs e)
-	{
-		VendTable vend_table = sender.cursor();
-		FormDataObject vend_table_fzone = sender.object(fieldNum(VendTable, FreightZone));
-		vend_table_fzone.enable(!vend_table.FreightZone);
-	}
-}
-
-
-Table Extensions
--the reason why you can't create extension is because the object whether table, form, menu is not imported yet in your project
--so add FMRental table to our project
--add the vehicle id of our DBFMVehicleTableTest to the fields
--add a primary key relation
--use set the properties like assocaiation, cardinality, relationship type and on delete to its respective values
--add a normal field to the relation and set field to vehicle id
--set the related field to the vehicle id as well
-
-file: DBFMVendTable_Extension.xpp
-[ExtensionOf(tableStr(VendTable))]
-final class DBFMVendTable_Extension
-{
-	public void initValue()
-	{
-		VendGroup vendGroup;
-
-		// ah ok because fields tables have internally no values
-		// then the initValue() method is called to initialize the fields to these values
-		// if there is no setting of any field then we can place next initValue() 
-		// either at the top or at the bottom
-		this.VendGroup = (select firstonly VendGroup from vendGroup).VendGroup;
-		next initValue();
-
-		// remember we can now dictate the behavior of the Vendtable because we have already extended it,
-		// so this is the class it now uses overall and the initValue() of the base class is not anymore
-		// the initValue() method being called but rather this declaration in our extension
-	}
-
-	[SysClientCacheDataMethodAttribute(true)]
-	display str customVendGroup()
-	{
-		return "DBFM_" + this.VendGroup
-	}
-}
-
-
--create an extension of the VendTable form
--go to the pattern tab of the VendTable form and under the MainTab sub pattern di ko na alam kung ano add a string which will represent our custom group
--set the properties data method to the method that we made which is customVendGroup under our extended VendTable, DBFMVendTable_Extension
--set hte data source to our VendTable
--set the label to "Custom Group"
-
-
-
-Activity 5a:
--add vehicle id field from DBFMVehicleTableTest on VendTable, and FMRental tables (do this by creating the extension first)
--Add relationship to DBFMVehicleTable cardinality: zeroone, related table cardinality: exactlyone, relationship type: association
-
-Activity 5b:
--set label of VendGroup field on VendTable to "Vendor group" by using label files
--open table browser of VendTable to check the additional field
--open all vendors to check the updated label
 
 
 
@@ -1263,10 +385,6 @@ Activity 9:
 -in the page we will see a button open as (excel etc.)
 -if it shows that the table acn be opened in excel then it is already a data entity
 
--search RetailVendVendorV3Staging
--add Dimensions and Ledger package to our model in order to use the RetailVendVendorV3Staging and RetailVendVendorV3Entity objects
-
-
 -for the next step follow the directory path C:/program files (x86)/microsoft sdks/azure/storage emulator
 -open the AzureStorageEmulator.exe.config file
 -change all the twos of the url attribute values of the three service elements to ones, maek sure to save the file as an administrator
@@ -1274,6 +392,20 @@ Activity 9:
 -once done run the command AzureStorageEmulator.exe start
 
 
+Activity 10:
+-search RetailVendVendorV3Staging
+-add Dimensions and Ledger package to our model in order to use the RetailVendVendorV3Staging and RetailVendVendorV3Entity objects
+
+-create extension of FMRental by adding a cluster index vehicleid service start date and service end date
+-add a cluster index vehicle id servie start and end dates to the DBFMVehicleMaintenance table, and set the "primary index" property value to the newly created index 
+-extend the entity FMRental
+-find references of the FMRental table in order to find the entity that uses this table
+-once entity is found open in designer and find its staging table which we know every entity has
+-add custom fields on entity
+-open FMRentalStaging
+-add custom fields on staging table
+-follow necessary protocol after 
+-open the excel and add tables DBFMVehicleMaintenanceEntity and FMRentalEntity in our excel sheet
 
 
 
@@ -1281,36 +413,12 @@ Activity 9:
 
 
 
-Version Control
-Azure DevOps Version Control - like GitHub
-Commands:
-get latest
-if we check in on source codes we put a short description with the update we have made/"committed"
-
-source code for fiannce and operattions is primarly in XML files that make up the AOT
-DevOps accoutns are for free like Github
-
-also has branches that we can merge with other branches perhaps a master branch that is very much akin to Git
 
 
 
 
 
-UNDER PENDING CHANGES
-if a file in the commit is not related to another file that has been changed
-then right click and click exclude
-format for comment: [initials e.g. LRC][work item id][task name][short descr of what changed or added in the source code]
-work related items - represents the tasks that are needed to be done for the project admin will give work id: [work item id]
-"project" change to "for deployment" then tag the admin or the owner of the repo (Daniel Bon)
-commit only to a development branch
 
-for development treat dev envs as disposable
-always get latest before updating source code to avoid code conflict this is before starting to code always. Equivalent to git pull
-only include changes from one feature in each changeset/commit
-shelve changes to keep work safe. Not saved in local only but already committed in the repo
-
-click shelve > add [initials e.g. LMC][work item id][task name][short descr of what changed or added in the source code]
-retain check if you want to return changes
 
 
 
@@ -1337,9 +445,63 @@ Unfortunate errors that are occuring in the project:
 
 
 
+
+
 to do:
-setup excel for dynamics 365 and enter server url
-setup powerBI and enter web API url
+exporting projects
+AOT search filter > t:model: <model name e.g. DevelopmentBasicsFMS > right click AOT > add search result to new project > set name for project e.g. CDSI_Rockwell
+right click project in solution explorer > export project > set name for file
+
+
+Version Control
+Azure DevOps Version Control - like GitHub
+Commands:
+get latest
+if we check in on source codes we put a short description with the update we have made/"committed"
+
+source code for fiannce and operattions is primarly in XML files that make up the AOT
+DevOps accoutns are for free like Github
+
+also has branches that we can merge with other branches perhaps a master branch that is very much akin to Git
+
+UNDER PENDING CHANGES
+if a file in the commit is not related to another file that has been changed
+then right click and click exclude
+format for comment: [initials e.g. LRC][work item id][task name][short descr of what changed or added in the source code]
+work related items - represents the tasks that are needed to be done for the project admin will give work id: [work item id]
+"project" change to "for deployment" then tag the admin or the owner of the repo (Daniel Bon)
+commit only to a development branch
+
+for development treat dev envs as disposable
+always get latest before updating source code to avoid code conflict this is before starting to code always. Equivalent to git pull
+only include changes from one feature in each changeset/commit
+shelve changes to keep work safe. Not saved in local only but already committed in the repo
+
+click shelve > add [initials e.g. LMC][work item id][task name][short descr of what changed or added in the source code]
+retain check if you want to return changes
+
+
+syncing to the CDSI model
+create a model
+select rockwell for referenced package and check CDSIRockwell [CDSI_Rockwell], DTAXRockwell [DTAXRockwell], FlexRockwell [FlexRockwell]
+click next and check build pre-compiled form, build reports, synchronize database, build cross referenced data
+
+Unable to find the certificate with the given thumbprint. Please use the thumbprint of an existing trusted certificate to get security token.. isLocalMode: False; useReportingCluster: False; thumbPrint: 38DAB993EA2C46254D5A878D4BBEB601F9148BD7; currentProcess: ReportingServicesService;
+
+1. Open the file in notepad > C:\AOSService\Webroot\wif.services.config
+
+2. Find the following line and copy the thumbprint :
+<certificateReference x509FindType="FindByThumbprint" findValue="0164D3744C633D8C0C641961F5FBE57D382B15E4" />
+
+3. Open notepad as Admin. Open the file > C:\Program Files\Microsoft SQL Server Reporting Services\SSRS\ReportServer\bin\ReportPVMConfiguration.xml
+
+4. Replace thumbprint with the thumbprint from wif.services.config and save.
+<ReportingClientCertificateThumbprint>6CDC778ADC1823FCE1E63C837270232A4E520676</ReportingClientCertificateThumbprint>
+
+5. Run Powershell as admin
+iisreset /restart
+Stop-Service -Name DynamicsAxBatch
+Start-Service -Name DynamicsAxBatch
 
 
 
@@ -1347,6 +509,7 @@ setup powerBI and enter web API url
 
 break 12:47
 end 1:34
+
 
 
 
