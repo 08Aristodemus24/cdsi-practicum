@@ -22,6 +22,33 @@ screenshot your code and save it with doodles for side notes
 
 
 
+errors:
+1. reports: Unable to find the certificate with the given thumbprint. Please use the thumbprint of an existing trusted certificate to get security token.. isLocalMode: False; useReportingCluster: False; thumbPrint: 38DAB993EA2C46254D5A878D4BBEB601F9148BD7; currentProcess: ReportingServicesService;
+fix: 
+open the file wif.services.config in notepad in directory C:\AOSService\Webroot\ 
+Find the following line and copy value (excluding quotation marks) of the findValue attribute: <certificateReference x509FindType="FindByThumbprint" findValue="0164D3744C633D8C0C641961F5FBE57D382B15E4" />
+Open notepad as Admin and simultaneously open the file ReportPVMConfiguration.xml in directory C:\Program Files\Microsoft SQL Server Reporting Services\SSRS\ReportServer\bin\
+Replace the inner html content of the element <ReportingClientCertificateThumbprint>6CDC778ADC1823FCE1E63C837270232A4E520676</ReportingClientCertificateThumbprint> with the value of the findValue attribute from wif.services.config and save
+run windows powershell as admin and enter following commands:
+iisreset /restart
+Stop-Service -Name DynamicsAxBatch
+Start-Service -Name DynamicsAxBatch
+
+or try opening services and stop and start the Microsoft Dynamics 365 Unified Operations: Batch Management Service 
+go to task manager and end the running "Batch" task there if an error in stopping the service above persists
+
+
+   
+
+2. reports: dynamics.ax.applicationplatform.0.pdb not included
+possible fix:
+PDB file should be in the folder K:\AosService\PackagesLocalDirectory\ApplicationPlatform\bin (K is service volume disk). First, you need to check if the file from the error can be found there
+if not try to compile "Application platform" model from Dynamics 365 menu
+check if the option "Load symbols only for items in the solution" is unchecked from Dynamics 365 -> Options
+
+
+
+
 default dashboard link:
 https://usnconeboxax1aos.cloud.onebox.dynamics.com/?cmp=rlc&mi=DefaultDashboard
 
