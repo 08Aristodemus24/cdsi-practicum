@@ -21,6 +21,23 @@ screenshot your code and save it with doodles for side notes
 
 
 
+protocols
+1. when getting latest version open internet informatin services manager and services, and stop both the IIS and the microsoft dynamics 365 unified operations: batch management services respectively to download the latest branch
+2. to change model of project follow click path right click project > properties > s:<model> for model property > apply > save
+
+
+
+to do:
+1. Good Day! See attached file for your task in RLC. Let’s target to finish this by Oct. 3, 2022.
+Please get the latest version before proceeding with the development.
+Associate this task number when checking in your changes: 442
+title: Aging Report detailed and Summary (Commercial)
+
+[Your Initial][Task number][Title] – remarks e.g. [DTC][310][Item Arrival] – Initial version
+
+2. 
+
+
 
 errors:
 1. reports: Unable to find the certificate with the given thumbprint. Please use the thumbprint of an existing trusted certificate to get security token.. isLocalMode: False; useReportingCluster: False; thumbPrint: 38DAB993EA2C46254D5A878D4BBEB601F9148BD7; currentProcess: ReportingServicesService;

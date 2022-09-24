@@ -1,0 +1,18 @@
+1. check report path Credi and Collections > Inquiries and reports > customized reports > customer aging report - commercial
+
+
+
+
+UIBuilder class
+parameters:
+-balance as of
+-aging period definition
+-include zero balance
+-include negative balance
+
+destination
+records to inlcude
+run in the background
+
+
+report design:
