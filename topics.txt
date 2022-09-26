@@ -21,10 +21,84 @@ screenshot your code and save it with doodles for side notes
 
 
 
+
+Supported File Extensions
+The file extensions that are supported for image files are: .bmp, .gif, .jpeg, .png, and .xpng.
+
+Referencing Images in Reports
+There are several ways to reference an image in a report. You can use embedded images, external images, or images that are stored as binary data in a database table. The following table describes each scenario.
+
+Type - Used in - Description
+Embedded - Auto designs and precision designs - An embedded image is one that is added directly to a model in your reporting project. You can add an image so that it is available to all reports in the model or just a single report. For more information, see How to: Add an Embedded Image.
+External - Precision designs - An external image is one that is stored separate from a report. To reference an external image in a report, you must specify a URL to indicate the location of the image. For more information, see How to: Display Images in a Precision Design.
+Database - Auto designs and precision design - Images that are stored as binary image data in a database table can also be displayed in reports. This is typical in the case of product listings where an image of the product displays along with the product details. For more information, see How to: Display Images in an Auto Design and How to: Display Images in a Precision Design.
+
+
+To display an image in a precision design
+In Model Editor, expand the node for the report that you want to work with.
+
+Expand the Designs node for the report.
+
+To edit a precision design, do one of the following.
+
+If the precision design already exists, right-click the design, and then click Edit Using Designer.
+
+If you have not created the precision design, right-click the Designs node, point to Add, and then click Precision Design.
+
+This opens the SQL Report Designer.
+
+In the Toolbox, select the Image control and drag it to an appropriate location in the report.
+
+If you want to display image data along with other data in a list, table, or matrix data region, you must first create the data region. If the image is from a database field, be sure to set the DataElementName property for the data region to the dataset that contains the field for the image. After you have done that, drag the image control to the appropriate location within the data region.
+
+The Image Properties dialog opens.
+
+Set the following properties:
+
+Property
+
+Description
+
+Name:
+
+Provide a name for the image.
+
+ToolTip:
+
+Provide a tool tip for the image.
+
+Select the image source:
+
+Use the drop-down to set the source of the image. For example, you can specify External, Embedded, or Database. For more information, see Report Images Overview.
+
+Use this image:
+
+The name or path of the image.
+
+If the Source property is set to Database, you must specify the field that contains the binary image data and the MIME type.
+
+If the Source property is set to External, you must provide a valid URL path to the image.
+
+If the Source property is set to Embedded, you must specify the name of the image.
+
+MIMEType
+
+The MIME type for the image. For example, image/gif or image/bmp.
+
+Save the changes made to the report.
+
+To preview the report with the image, click the Preview tab in SQL Report Designer. Or, in Model Editor, right-click the node for the design, and then click Preview.
+
+
+
+
+
+
+
 protocols
 1. when getting latest version open internet informatin services manager and services, and stop both the IIS and the microsoft dynamics 365 unified operations: batch management services respectively to download the latest branch
 2. to change model of project follow click path right click project > properties > s:<model> for model property > apply > save
-
+3. when contract class is added more parameters then you must restore the dataset of the report
 
 
 to do:
@@ -36,6 +110,11 @@ title: Aging Report detailed and Summary (Commercial)
 [Your Initial][Task number][Title] – remarks e.g. [DTC][310][Item Arrival] – Initial version
 
 2. 
+
+
+
+
+
 
 
 
