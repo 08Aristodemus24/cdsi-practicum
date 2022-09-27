@@ -99,6 +99,10 @@ protocols
 1. when getting latest version open internet informatin services manager and services, and stop both the IIS and the microsoft dynamics 365 unified operations: batch management services respectively to download the latest branch
 2. to change model of project follow click path right click project > properties > s:<model> for model property > apply > save
 3. when contract class is added more parameters then you must restore the dataset of the report
+4. cd C:\AosService\PackagesLocalDirectory\Plugins\AxReportVmRoleStartupTask then run the following .\DeployAllReportsToSsrs.ps1 -PackageInstallLocation C:\AosService\PackagesLocalDirectory -ReportName <report file name>.*
+
+
+
 
 
 to do:
@@ -109,7 +113,14 @@ title: Aging Report detailed and Summary (Commercial)
 
 [Your Initial][Task number][Title] – remarks e.g. [DTC][310][Item Arrival] – Initial version
 
-2. 
+2. identify the tables these fields belong to
+
+the tables are already indicated but confirm it nevertheless: 
+
+customer transactions: 
+customer invoice journal (includes sales lines, lease lines, free text invoices, and general journal)
+customer payment journal in the system
+
 
 
 
